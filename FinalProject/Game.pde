@@ -43,14 +43,7 @@ class Game {
     }
     else if(gamestate == 1)
     {
-    board.update();
-    paddle.update();
-    
-    for (Ball b : balls) {
-      b.update();
-    }
-    
-    
+      gameLoop();
     }
     else if(gamestate == 2)
     {
@@ -85,11 +78,27 @@ class Game {
  void initMenus()
  {
    mainmenu = new Menu();
-   mainmenu.addButton("START");
-   mainmenu.addButton("OPTIONS");
-   mainmenu.addButton("ABOUT");
+   mainmenu.addButton("Start");
+   mainmenu.addButton("Options");
+   mainmenu.addButton("About");
+   
+   pausemenu = new Menu();
+   pausemenu.addButton("RESUME");
+   pausemenu.addButton("QUIT");
    
    
+  
+ }
+ 
+ 
+ void gameLoop()
+ {
+    board.update();
+    paddle.update();
+    
+    for (Ball b : balls) {
+      b.update();
+    }
  }
   
   

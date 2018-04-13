@@ -46,6 +46,7 @@ void update()
   
   // line guides - remove later
   stroke(0);
+  strokeWeight(1);
   for(int i = 0; i < 6; i++)
   {
     line(xpos, ypos+(i*mheight/6), xpos+mwidth, ypos+(i*mheight/6));
