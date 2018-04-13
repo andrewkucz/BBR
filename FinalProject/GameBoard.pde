@@ -53,7 +53,6 @@ class GameBoard {
     brickw = (bwidth-((cols+1)*gap)) / cols;
     brickh = ((bheight/3)-((rows+1)*gap)) / rows;
     
-    
     if(lev == 1)
     {
       for(int i = 0; i<rows; i++)
@@ -70,7 +69,7 @@ class GameBoard {
     
 }
   
-  void drawBoard() {
+  void update() {
     
     strokeWeight(1);
     noStroke();
@@ -104,7 +103,7 @@ class GameBoard {
     return true;
   }
   
-  void setBGcolor(color c)
+  void setBackgroundColor(color c)
   {
     bgcolor = c;
   }

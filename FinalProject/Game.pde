@@ -1,5 +1,7 @@
 class Game {
-  
+ 
+ Menu mainmenu;
+ Menu pausemenu;
  GameBoard board;
  Paddle paddle;
  Ball ball;
@@ -30,9 +32,10 @@ class Game {
  // Game cycle
  void update()
  {
-    board.drawBoard();
+    board.update();
     paddle.update();
     ball.update();
+    
     checkCollisions();
  }
  
