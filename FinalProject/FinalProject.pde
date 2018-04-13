@@ -10,13 +10,10 @@ void setup()
 
 void draw()
 {
-  
-  if(!game.paused)
-  {
   game.update();
-  }
-  
 }
+
+
 
 
 

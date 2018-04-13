@@ -2,16 +2,18 @@ class Game {
  
  Menu mainmenu;
  Menu pausemenu;
+ Menu optionsmenu;
  GameBoard board;
  Paddle paddle;
- Ball ball;
+ ArrayList<Ball> balls = new ArrayList<Ball>();
  int score, numLives;
  String playername;
- boolean paused;
+ int gamestate = 0;
  String[][] highscores = new String[5][2];
   
  Game() {
    
+   //gamestate = 1;
    score = 0;
    numLives = 3;
    
@@ -23,8 +25,11 @@ class Game {
    paddle.setLocation(board.xpos + ((board.bwidth-paddle.padwidth)/2), board.bheight - (paddle.padheight*2));
   
    // Initialize ball object
-   ball = new Ball(true);
-   ball.setLocation(paddle.xpos+paddle.padwidth/2, paddle.ypos-ball.size/2);
+   balls.add(new Ball(true));
+   balls.get(0).setLocation(paddle.xpos+paddle.padwidth/2, paddle.ypos-balls.get(0).size/2);
+   
+   // Initialize menus
+   initMenus();;
    
  }
    
@@ -32,9 +37,28 @@ class Game {
  // Game cycle
  void update()
  {
+    if(gamestate == 0)
+    {
+      mainmenu.update();
+    }
+    else if(gamestate == 1)
+    {
     board.update();
     paddle.update();
-    ball.update();
+    
+    for (Ball b : balls) {
+      b.update();
+    }
+    
+    
+    }
+    else if(gamestate == 2)
+    {
+      pausemenu.update();
+    }
+    
+
+    
     
     checkCollisions();
  }
@@ -53,6 +77,17 @@ class Game {
    
    
    
+   
+   
+ }
+ 
+ 
+ void initMenus()
+ {
+   mainmenu = new Menu();
+   mainmenu.addButton("START");
+   mainmenu.addButton("OPTIONS");
+   mainmenu.addButton("ABOUT");
    
    
  }
