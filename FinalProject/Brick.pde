@@ -9,17 +9,16 @@ class Brick {
   
   Brick()
   {
-    state=1;
-    brickcol = color(0);
-    level = 1;
+    state=0;
   }
   
-  Brick(int x, int y, int s, int l)
+  Brick(int x, int y, int s, int l, Powerup p)
   {
     xpos = x;
     ypos = y;
     state = s;
     level = l;
+    power = p;
     
     if(l == 1)
     {
@@ -39,19 +38,16 @@ class Brick {
     power.update();
   }
   
-  void initPowerup()
-  {
-    power = new Powerup(xpos+(brickw/2), ypos+(brickh/2));
-  }
-  
-  
   
   void hit()
   {
     if(state>0)
     state--;
-    
-
+  }
+  
+  int getState()
+  {
+    return state;
   }
   
   

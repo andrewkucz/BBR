@@ -12,25 +12,10 @@ class Game {
  String[][] highscores = new String[5][2];
   
  Game() {
-   
    gamestate = 0;
    score = 0;
    numLives = 3;
-   
-   // Initialize game board containing the brick array
-   board = new GameBoard();
-   
-   // Initialize user controlled paddle object
-   paddle = new Paddle(board.bwidth/5, 15, 0, color(0));
-   paddle.setLocation(board.xpos + ((board.bwidth-paddle.padwidth)/2), board.bheight - (paddle.padheight*2));
-  
-   // Initialize ball object
-   balls.add(new Ball(true));
-   balls.get(0).setLocation(paddle.xpos+paddle.padwidth/2, paddle.ypos-balls.get(0).size/2);
-   
-   // Initialize menus
-   initMenus();;
-   
+   initGameComponents();
  }
    
  
@@ -54,7 +39,7 @@ class Game {
     }
     else if(gamestate == 3)
     {
-      optionsmenu.update();
+      //optionsmenu.update();
     }
     
     updateGameState();
@@ -62,6 +47,25 @@ class Game {
     // move collision check (?)
     checkCollisions();
  }
+ 
+ void initGameComponents()
+ {
+   // Initialize game board containing the brick array
+   board = new GameBoard();
+   
+   // Initialize user controlled paddle object
+   paddle = new Paddle(board.bwidth/5, 15, 0, color(0));
+   paddle.setLocation(board.xpos + ((board.bwidth-paddle.padwidth)/2), board.bheight - (paddle.padheight*2));
+  
+   // Initialize ball object
+   balls.clear();
+   balls.add(new Ball(true));
+   balls.get(0).setLocation(paddle.xpos+paddle.padwidth/2, paddle.ypos-balls.get(0).size/2);
+   
+   // Initialize menus
+   initMenus();
+ }
+ 
  
  
  
@@ -92,7 +96,6 @@ class Game {
    pausemenu = new Menu();
    pausemenu.addButton("Resume");
    pausemenu.addButton("Quit");
-  
  }
  
  
@@ -144,8 +147,7 @@ class Game {
     if(gamestate == 2 && pausemenu.buttons.get(1).isHovered() && mousePressed)
     {
       gamestate = 0;
-      
-      // <new game initialization to be added here>
+      initGameComponents();
     }
     
   }
