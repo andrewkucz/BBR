@@ -11,16 +11,12 @@ void setup()
   font = loadFont("PixelCowboy-24.vlw");
   
   game = new Game();
-  
 }
 
 void draw()
 {
   game.update();
 }
-
-
-
 
 
 void keyPressed()
