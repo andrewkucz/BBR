@@ -5,10 +5,15 @@ class Menu {
   
   // bg color
   color bgcolor = color(255);
-  
-  boolean open;
-  
   ArrayList<MenuButton> buttons = new ArrayList<MenuButton>();
+  String title;
+  
+  int counter = 0;
+  int threshold = 6;
+  
+  color[] rainbow = {color(255,0,0), color(255,140,0), color(250,250,0),
+                     color(0,255,0), color(0,0,255), color(153,50,200)};
+  PImage titlecard;
   
 
 Menu()
@@ -37,26 +42,55 @@ void update()
   strokeWeight(1);
   noStroke();
   fill(bgcolor);
-  rect(xpos, ypos, mwidth, mheight);
+  rect(xpos, ypos, mwidth, mheight); 
   
   for (MenuButton mb : buttons) {
      mb.update();
   }
   
   
-  // line guides - remove later
-  stroke(0);
-  strokeWeight(1);
-  for(int i = 0; i < 6; i++)
-  {
-    line(xpos, ypos+(i*mheight/6), xpos+mwidth, ypos+(i*mheight/6));
-  }
-  // remove later ^^^
   
 }
 
+void updateAnimated()
+{  
+  titlecard = loadImage("BB2.png");
+  imageMode(CENTER);
+  
+  int sqsize = mwidth/28;
 
+                     
+  if(counter == threshold)
+  {
+  color temp;
+  temp = rainbow[0];
+  for(int i=0; i<rainbow.length-1; i++)
+  {
+    rainbow[i] = rainbow[i+1];
+  }
+  rainbow[rainbow.length-1] = temp;
+  noStroke();
+  for(int i=1; i<(mwidth/sqsize)+1 ; i++) // cols
+  {
+    for(int j=1; j<(mheight/sqsize)+2; j++) // rows
+    {
+      
+      fill( rainbow[(j+(i-1))%6] );     
+      rect(xpos + (i-1)*sqsize, ypos + (j-1)*sqsize, sqsize, sqsize);
+    } 
+  }
+  counter = 0;
+  fill(0);
+  rect(xpos, ypos+mheight, mwidth, 10);
+  image(titlecard, xpos+mwidth/2, ypos+mheight/4);
+  }
+  counter++;                  
 
+  for (MenuButton mb : buttons) {
+     mb.update();
+  }
+
+}
 
 
 

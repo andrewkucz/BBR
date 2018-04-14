@@ -15,7 +15,7 @@ class MenuButton extends Menu {
     btnwidth = super.mwidth/2;
     label = l;
     textColor = color(255);
-    btnColor = color(40);
+    btnColor = color(0);
     xpos = super.xpos + ((super.mwidth - btnwidth)/2);
     hover = false;
   }
@@ -38,7 +38,7 @@ class MenuButton extends Menu {
       stroke(255);
       strokeWeight(3);
       rect(xpos-1, ypos-1, btnwidth+1, btnheight+1);
-      fill(200,0,0);
+      fill(40);
     }
     else
     {

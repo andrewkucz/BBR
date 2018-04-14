@@ -23,11 +23,10 @@ class Game {
  void update()
  {
     
-   // replace with switch statement
    
    if(gamestate == 0)
     {
-      mainmenu.update();
+      mainmenu.updateAnimated();
     }
     else if(gamestate == 1)
     {
