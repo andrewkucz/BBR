@@ -58,5 +58,10 @@ class MenuButton extends Menu {
     ypos = y;
   }
   
+  boolean isHovered()
+  {
+    return hover;
+  }
+  
   
 }

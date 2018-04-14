@@ -26,6 +26,7 @@ class Ball {
   void update()
   { 
     fill(ballcol);
+    noStroke();
     ellipse(xpos, ypos, size, size);
     xpos += xvel;
     ypos += yvel;

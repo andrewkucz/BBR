@@ -38,7 +38,7 @@ class GameBoard {
     board = new Brick[rows][cols];
     
     bheight = height-20;
-    bwidth = 600;
+    bwidth = 588;
     ypos = (height-bheight)/2;
     xpos = (width-bwidth)/2;
     
@@ -59,7 +59,10 @@ class GameBoard {
       {
         for(int j = 0; j<cols; j++)
         {
-          board[i][j] = new Brick((i/2)+1,0,lev);
+          board[i][j] = new Brick(xpos+(gap*(j+1))+(brickw*j),ypos+(gap*(i+1))+(brickh*i), (i/2)+1,lev);
+          board[i][j].brickw = brickw;
+          board[i][j].brickh = brickh;
+          board[i][j].initPowerup();
         }
       }
    
@@ -71,7 +74,6 @@ class GameBoard {
   
   void update() {
     
-    strokeWeight(1);
     noStroke();
     fill(bgcolor);
     rect(xpos, ypos, bwidth, bheight);
@@ -83,8 +85,10 @@ class GameBoard {
         if(board[i][j].state > 0)
         {
           fill(board[i][j].brickcol);
-          rect(xpos+(gap*(j+1))+(brickw*j), ypos+(gap*(i+1))+(brickh*i), brickw, brickh);
+          noStroke();
+          board[i][j].drawBrick();
         }
+        
       }
     }
   }

@@ -8,13 +8,7 @@ class Paddle {
   int maxspeed = 4;
   
   int powerupstate;
-  // Powerups
-  // 0 - Nothing
-  // 1 - Longer paddle
-  // 2 - Faster paddle
-  // 3 - Galaga mode
-  // 4 - Multi-ball
-  // 5 - Fireball 
+
   
   
   Paddle(int pw, int ph, int pus, color c) {
@@ -24,13 +18,13 @@ class Paddle {
     powerupstate = pus;
     paddlecol = c;
     xvel = 0;
-  
 }
   
  
   void update() {
     
     fill(paddlecol);
+    noStroke();
     rect(xpos, ypos, padwidth, padheight);
     
     xpos += xvel;

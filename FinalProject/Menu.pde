@@ -11,7 +11,7 @@ class Menu {
   ArrayList<MenuButton> buttons = new ArrayList<MenuButton>();
   
 
-Menu() 
+Menu()
 {
   mheight = height-20;
   mwidth = 588;

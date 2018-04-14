@@ -8,12 +8,12 @@ class Game {
  ArrayList<Ball> balls = new ArrayList<Ball>();
  int score, numLives;
  String playername;
- int gamestate = 0;
+ int gamestate;
  String[][] highscores = new String[5][2];
   
  Game() {
    
-   //gamestate = 1;
+   gamestate = 0;
    score = 0;
    numLives = 3;
    
@@ -37,7 +37,10 @@ class Game {
  // Game cycle
  void update()
  {
-    if(gamestate == 0)
+    
+   // replace with switch statement
+   
+   if(gamestate == 0)
     {
       mainmenu.update();
     }
@@ -49,10 +52,14 @@ class Game {
     {
       pausemenu.update();
     }
+    else if(gamestate == 3)
+    {
+      optionsmenu.update();
+    }
     
-
+    updateGameState();
     
-    
+    // move collision check (?)
     checkCollisions();
  }
  
@@ -83,10 +90,8 @@ class Game {
    mainmenu.addButton("About");
    
    pausemenu = new Menu();
-   pausemenu.addButton("RESUME");
-   pausemenu.addButton("QUIT");
-   
-   
+   pausemenu.addButton("Resume");
+   pausemenu.addButton("Quit");
   
  }
  
@@ -101,6 +106,49 @@ class Game {
     }
  }
   
+  
+  void updateGameState()
+  {
+    
+    // Main menu start is clicked
+    if(gamestate == 0 && mainmenu.buttons.get(0).isHovered() && mousePressed)
+    {
+      gamestate = 1;
+    }
+    
+    // Main menu options is clicked
+    if(gamestate == 0 && mainmenu.buttons.get(1).isHovered() && mousePressed)
+    {
+      gamestate = 3;
+    }
+    
+    // Main menu about is clicked
+    if(gamestate == 0 && mainmenu.buttons.get(1).isHovered() && mousePressed)
+    {
+      gamestate = 4;
+    }
+    
+    // Game is running and p is pressed -> pause state
+    if(gamestate == 1 && keyPressed && key == 'p')
+    {
+      gamestate = 2;
+    }
+    
+    // Pause menu resume is clicked
+    if(gamestate == 2 && pausemenu.buttons.get(0).isHovered() && mousePressed)
+    {
+      gamestate = 1;
+    }
+    
+    // Pause menu quit is clicked
+    if(gamestate == 2 && pausemenu.buttons.get(1).isHovered() && mousePressed)
+    {
+      gamestate = 0;
+      
+      // <new game initialization to be added here>
+    }
+    
+  }
   
 
   

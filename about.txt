@@ -6,3 +6,17 @@ gamestate = 0 | main menu, game waiting to be initialized
 gamestate = 1 | active gameplay (game running)
 
 gamestate = 2 | game paused (options: quit(gs=0) or resume (gs=1))
+
+gamestate = 3 | options menu
+
+gamestate = 4 | about screen
+
+
+Powerup types:
+
+0 - Nothing/null
+1 - Longer paddle
+2 - Faster paddle
+3 - Galaga mode
+4 - Multi-ball
+5 - Fireball 
