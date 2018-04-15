@@ -8,7 +8,7 @@ void setup()
 {
   size(1400,800);
   background(0);
-  font = loadFont("PixelCowboy-24.vlw");
+  font = loadFont("Axis-32.vlw");
   
   game = new Game();
 }
