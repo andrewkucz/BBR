@@ -9,7 +9,7 @@ class Game {
  int score, numLives;
  String playername;
  int gamestate;
- String[][] highscores = new String[5][2];
+ Leaderboard highscores;
   
  Game() {
    gamestate = 0;
@@ -63,6 +63,10 @@ class Game {
    
    // Initialize menus
    initMenus();
+   
+   // Init leaderboard
+   highscores = new Leaderboard();
+   highscores.setLocation(board.xpos + board.bwidth, board.ypos);
  }
  
  
@@ -100,6 +104,7 @@ class Game {
  {
     board.update();
     paddle.update();
+    highscores.update();
     
     for (Ball b : balls) {
       b.update();
