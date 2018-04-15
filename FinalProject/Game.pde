@@ -1,6 +1,6 @@
 class Game {
  
- Menu mainmenu;
+ TitleScreen mainmenu;
  Menu pausemenu;
  Menu optionsmenu;
  GameBoard board;
@@ -26,7 +26,7 @@ class Game {
    
    if(gamestate == 0)
     {
-      mainmenu.updateAnimated();
+      mainmenu.update();
     }
     else if(gamestate == 1)
     {
@@ -78,16 +78,14 @@ class Game {
      paddle.xvel = 0;
    }  
    
-   
-   
-   
+   // insert a lot of code and math here
    
  }
  
  
  void initMenus()
  {
-   mainmenu = new Menu();
+   mainmenu = new TitleScreen();
    mainmenu.addButton("Start");
    mainmenu.addButton("Options");
    mainmenu.addButton("About");
