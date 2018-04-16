@@ -9,6 +9,8 @@ class Leaderboard {
   String filename = "leaderboard.txt";
   int bheight = (height-20)/3; 
   int bwidth = (width-588)/2;
+  int textsize = 24;
+  PFont font;
   
   
   Leaderboard()
@@ -16,13 +18,15 @@ class Leaderboard {
     xpos = 0;
     ypos = 0;
     parseFile(); 
+    font = loadFont("ArcadeNormal-48.vlw");
   }
   
   Leaderboard(int x, int y)
   {
     xpos = x;
     ypos = y;
-    parseFile(); 
+    parseFile();
+    font = loadFont("ArcadeNormal-48.vlw");
   }
   
   void parseFile()
@@ -45,6 +49,7 @@ class Leaderboard {
         }
         line = reader.readLine();
       }
+      
     
     reader.close();
     } 
@@ -94,10 +99,13 @@ class Leaderboard {
   
  void update()
  {
-   fill(255,0,0);
+   fill(0);
    rect(xpos, ypos, bwidth, bheight);
    fill(255);
-   textSize(24);
+   textFont(font);
+   textSize(14);
+   
+   text("Highscores", xpos+(bwidth/2), ypos + bheight*0.1);
    
    for(int i=0; i<board.size(); i++)
    {
@@ -149,14 +157,14 @@ class Scoreline {
  {
    String s = "";
    s+= name;
-   for(int i=0; i<10-name.length(); i++)
+   for(int i=0; i<5-name.length(); i++)
    {
      s+=" ";
    }
-   s += " | ";
+   s += " |   ";
       for(int i=0; i<5-Integer.toString(score).length(); i++)
    {
-     s+=" ";
+     s+="0";
    }
    s += Integer.toString(score);
    return s;
