@@ -58,7 +58,7 @@ class Game {
   
    // Initialize ball object
    balls.clear();
-   balls.add(new Ball(true));
+   balls.add(new Ball(1));
    balls.get(0).setLocation(paddle.xpos+paddle.padwidth/2, paddle.ypos-balls.get(0).size/2);
    
    // Initialize menus
@@ -107,6 +107,10 @@ class Game {
     highscores.update();
     
     for (Ball b : balls) {
+      if(b.getState() == 1)
+      {
+        b.setLocation(paddle.xpos+paddle.padwidth/2, paddle.ypos-balls.get(0).size/2);
+      }
       b.update();
     }
  }

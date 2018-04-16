@@ -11,6 +11,7 @@ void setup()
   font = loadFont("Axis-32.vlw");
   
   game = new Game();
+  game.highscores.insertScore("Stephanie", 2);
 }
 
 void draw()

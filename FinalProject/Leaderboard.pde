@@ -97,12 +97,11 @@ class Leaderboard {
    fill(255,0,0);
    rect(xpos, ypos, bwidth, bheight);
    fill(255);
-   textFont(loadFont("Axis-24.vlw"));
+   textSize(24);
    
-   for(int i=0; i<5; i++)
+   for(int i=0; i<board.size(); i++)
    {
-    
-     text((i+1) + " | " + board.get(i).getName() + " | " + board.get(i).getScore() + "pts", xpos+(bwidth/2), ypos+(30*i)+(bheight*0.25));
+     text(board.get(i).toString(), xpos+(bwidth/2), ypos+(30*i)+(bheight*0.25));
    }
  }
   
@@ -146,6 +145,23 @@ class Scoreline {
  {
    return name;
  }
+ String toString()
+ {
+   String s = "";
+   s+= name;
+   for(int i=0; i<10-name.length(); i++)
+   {
+     s+=" ";
+   }
+   s += " | ";
+      for(int i=0; i<5-Integer.toString(score).length(); i++)
+   {
+     s+=" ";
+   }
+   s += Integer.toString(score);
+   return s;
+ }
+ 
  
   
 }

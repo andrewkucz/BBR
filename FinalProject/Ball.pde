@@ -4,19 +4,28 @@ class Ball {
   float xvel, yvel;
   int size = 20;
   color ballcol = color(255,0,0);
+  Pointer arrow;
   
-  boolean active;
+  int state;
+  // 0 - inactive / invisible
+  // 1 - visible, waiting to start
+  // 2 - in action
+  // 3 - dead
     
   Ball()
   {
-    active = false;
+    state = 0;
     xvel = 0;
     yvel = 0;
   }
   
-  Ball(boolean a) 
+  Ball(int s) 
   {
-    active = a;
+    state = s;
+    if(s == 1)
+    {
+       arrow = new Pointer(); 
+    }
     xvel = 0;
     yvel = 0;
   }  
@@ -25,11 +34,19 @@ class Ball {
   
   void update()
   { 
+    
+    if(state==1)
+    {
+      arrow.setLocation(xpos, ypos);
+      arrow.update();
+    }
+    
     fill(ballcol);
     noStroke();
     ellipse(xpos, ypos, size, size);
     xpos += xvel;
     ypos += yvel;
+    
   }
   
   
@@ -58,6 +75,10 @@ class Ball {
   int getY()
   {
     return ypos;
+  }
+  int getState()
+  {
+    return state;
   }
   
   
