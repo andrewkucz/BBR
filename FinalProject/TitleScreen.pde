@@ -1,26 +1,21 @@
 class TitleScreen extends Menu
 {
   
-  PImage[] bgframes = new PImage[6];
-  
+  // animation handling
+  PImage[] frames = new PImage[6];
   int counter = 0;
   int threshold = 6;
   int index = 0;
   PImage titlecard;
   
-  
-  
   TitleScreen()
   {
-    super();
-    
+    font = loadFont("Axis-32.vlw");
     for(int i=0; i<6; i++)
     {
-    bgframes[i] = loadImage("frame" + (i+1) + ".png");
+    frames[i] = loadImage("frame" + (i+1) + ".png");
     }
-  
     titlecard = loadImage("BBR2.png");
-    
   }
   
  void update()
@@ -30,14 +25,13 @@ class TitleScreen extends Menu
   
   if(counter == threshold)
   {
-    image(bgframes[index],xpos+(mwidth/2),ypos+(mheight/2));
-    image(titlecard, xpos+(mwidth/2),ypos+(mheight/4));
+    image(frames[index],xpos+(w/2),ypos+(h/2));
+    image(titlecard, xpos+(w/2),ypos+(h/4));
   
   for (MenuButton mb : buttons) {
      mb.update();
   }
 
-  
   counter = 0;
   index++;
   if(index == 6)

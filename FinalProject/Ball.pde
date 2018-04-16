@@ -1,23 +1,13 @@
-class Ball {
+class Ball extends Entity {
  
-  int xpos, ypos;
-  float xvel, yvel;
-  int size = 20;
-  color ballcol = color(255,0,0);
   Pointer arrow;
   
-  int state;
+  // State definitions
+  
   // 0 - inactive / invisible
-  // 1 - visible, waiting to start
-  // 2 - in action
-  // 3 - dead
-    
-  Ball()
-  {
-    state = 0;
-    xvel = 0;
-    yvel = 0;
-  }
+  // 1 - visible, waiting to start (unmoving, attached to paddle)
+  // 2 - in action - bouncing around, checking for collisions
+  // 3 - dead (?)
   
   Ball(int s) 
   {
@@ -26,6 +16,9 @@ class Ball {
     {
        arrow = new Pointer(); 
     }
+    w = 20;
+    h = 20;
+    col = color(255,0,0);
     xvel = 0;
     yvel = 0;
   }  
@@ -34,48 +27,26 @@ class Ball {
   
   void update()
   { 
-    
     if(state==1)
     {
       arrow.setLocation(xpos, ypos);
       arrow.update();
     }
     
-    fill(ballcol);
+    fill(col);
     noStroke();
-    ellipse(xpos, ypos, size, size);
+    ellipse(xpos, ypos, w, h);
     xpos += xvel;
     ypos += yvel;
     
   }
   
   
-  // Getters and setters
-  
-  void setColor(color c)
+  void setState(int s)
   {
-    ballcol = c;
+    state = s;
   }
-  
-  color getColor()
-  {
-    return ballcol;
-  }
-  
-  void setLocation(int x, int y)
-  {
-    xpos = x;
-    ypos = y;
-  }
-  
-  int getX()
-  {
-    return xpos;
-  }
-  int getY()
-  {
-    return ypos;
-  }
+
   int getState()
   {
     return state;

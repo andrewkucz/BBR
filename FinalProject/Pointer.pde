@@ -1,10 +1,8 @@
-class Pointer
+class Pointer extends Entity
 {
-  int xpos;
-  int ypos;
+  
   int length = 60;
   int thickness = 2;
-  
   float angle = 0;
   float angularvel = 0.02;
   
@@ -39,22 +37,5 @@ class Pointer
     
     resetMatrix();
   }
-  
-  void setLocation(int x, int y)
-  {
-    xpos = x;
-    ypos = y;
-  }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
   
 }

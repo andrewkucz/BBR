@@ -1,29 +1,25 @@
 class MenuButton extends Menu {
   
-  int btnheight, btnwidth;
+  int w, h;
   int xpos, ypos;
   String label;
-  color textColor;
-  color btnColor;
-  
+  color textColor = color(0);
+  color btnColor = color(255);
   boolean hover;
 
-  
   MenuButton(String l)
   {
-    btnheight = super.mheight/13;
-    btnwidth = super.mwidth/2;
+    h = super.h/13;
+    w = super.w/2;
+    xpos = super.xpos + ((super.w - w)/2);
     label = l;
-    textColor = color(0);
-    btnColor = color(255);
-    xpos = super.xpos + ((super.mwidth - btnwidth)/2);
     hover = false;
   }
   
   
   void update()
   {
-    if(mouseX >= xpos && mouseX <= xpos+btnwidth && mouseY >= ypos && mouseY <= ypos+btnheight)
+    if(mouseX >= xpos && mouseX <= xpos+w && mouseY >= ypos && mouseY <= ypos+h)
     {
       hover = true;      
     }
@@ -43,12 +39,12 @@ class MenuButton extends Menu {
       stroke(0);
     }
     strokeWeight(2);
-    rect(xpos, ypos, btnwidth, btnheight);
+    rect(xpos, ypos, w, h);
     fill(textColor);
-    textSize(btnheight/2);
+    textSize(h/2);
     textAlign(CENTER);
     textFont(font);
-    text(label, xpos+(btnwidth/2), ypos+(btnheight/2)+(btnheight*0.2)); 
+    text(label, xpos+(w/2), ypos+(h/2)+(h*0.2)); 
   }
   
   void setY(int y)

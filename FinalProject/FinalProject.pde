@@ -1,6 +1,5 @@
 Game game;
 boolean leftpressed, rightpressed;
-PFont font;
 
 
 
@@ -8,7 +7,6 @@ void setup()
 {
   size(1400,800);
   background(0);
-  font = loadFont("Axis-32.vlw");
   
   game = new Game();
 }

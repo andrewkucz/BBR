@@ -1,28 +1,17 @@
-class Leaderboard {
+class Leaderboard extends Entity {
  
-  int xpos, ypos;
   ArrayList<Scoreline> board = new ArrayList<Scoreline>();
-  
   BufferedReader reader;
   PrintWriter writer;
- 
   String filename = "leaderboard.txt";
-  int bheight = (height-20)/3; 
-  int bwidth = (width-588)/2;
-  int textsize = 24;
+  int textsize = 16;
   PFont font;
   
   
-  Leaderboard()
-  {
-    xpos = 0;
-    ypos = 0;
-    parseFile(); 
-    font = loadFont("ArcadeNormal-48.vlw");
-  }
-  
   Leaderboard(int x, int y)
   {
+    w = (width-588)/2;
+    h = (height-20)/3;
     xpos = x;
     ypos = y;
     parseFile();
@@ -91,34 +80,26 @@ class Leaderboard {
     
   }
  
- void setLocation(int x, int y)
- {
-   xpos = x;
-   ypos = y;
- }
   
  void update()
  {
    fill(0);
-   rect(xpos, ypos, bwidth, bheight);
+   rect(xpos, ypos, w, h);
    fill(255);
    textFont(font);
-   textSize(14);
+   textSize(textsize);
    
-   text("Highscores", xpos+(bwidth/2), ypos + bheight*0.1);
+   text("Highscores", xpos+(w/2), ypos + h*0.1);
    
    for(int i=0; i<board.size(); i++)
    {
-     text(board.get(i).toString(), xpos+(bwidth/2), ypos+(30*i)+(bheight*0.25));
+     text(board.get(i).toString(), xpos+(w/2), ypos+(30*i)+(h*0.25));
    }
  }
   
   
-  
-  
-  
-  
 }
+
 
 
 
@@ -157,11 +138,7 @@ class Scoreline {
  {
    String s = "";
    s+= name;
-   for(int i=0; i<5-name.length(); i++)
-   {
-     s+=" ";
-   }
-   s += " |   ";
+   s += "........";
       for(int i=0; i<5-Integer.toString(score).length(); i++)
    {
      s+="0";

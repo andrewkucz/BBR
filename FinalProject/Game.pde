@@ -10,6 +10,7 @@ class Game {
  String playername;
  int gamestate;
  Leaderboard highscores;
+
   
  Game() {
    gamestate = 0;
@@ -50,23 +51,22 @@ class Game {
  void initGameComponents()
  {
    // Initialize game board containing the brick array
-   board = new GameBoard();
+   board = new GameBoard(1);
    
    // Initialize user controlled paddle object
-   paddle = new Paddle(board.bwidth/5, 15, 0, color(0));
-   paddle.setLocation(board.xpos + ((board.bwidth-paddle.padwidth)/2), board.bheight - (paddle.padheight*2));
+   paddle = new Paddle(board.w/5, 15, 0, color(0));
+   paddle.setLocation(board.xpos + ((board.w-paddle.w)/2), board.h - (paddle.h*2));
   
    // Initialize ball object
    balls.clear();
    balls.add(new Ball(1));
-   balls.get(0).setLocation(paddle.xpos+paddle.padwidth/2, paddle.ypos-balls.get(0).size/2);
+   balls.get(0).setLocation(paddle.xpos+paddle.w/2, paddle.ypos-balls.get(0).h/2);
    
    // Initialize menus
    initMenus();
    
    // Init leaderboard
-   highscores = new Leaderboard();
-   highscores.setLocation(board.xpos + board.bwidth, board.ypos);
+   highscores = new Leaderboard(board.xpos + board.w, board.ypos);
  }
  
  
@@ -77,7 +77,7 @@ class Game {
  {
    
    // Paddle collision with the walls
-   if((paddle.xpos <= board.xpos && !rightpressed) || (paddle.xpos+paddle.padwidth >= board.xpos+board.bwidth && !leftpressed))
+   if((paddle.xpos <= board.xpos && !rightpressed) || (paddle.xpos+paddle.w >= board.xpos+board.w && !leftpressed))
    {
      paddle.xvel = 0;
    }  
@@ -109,7 +109,7 @@ class Game {
     for (Ball b : balls) {
       if(b.getState() == 1)
       {
-        b.setLocation(paddle.xpos+paddle.padwidth/2, paddle.ypos-balls.get(0).size/2);
+        b.setLocation(paddle.xpos+paddle.w/2, paddle.ypos-balls.get(0).h/2);
       }
       b.update();
     }
