@@ -9,7 +9,7 @@ class Ball extends Entity {
   // 1 - visible, waiting to start (unmoving, attached to paddle)
   // 2 - in action - bouncing around, checking for collisions
   // 3 - dead (?)
-  
+
   PVector velocity;
   float speed;
 
@@ -69,14 +69,10 @@ class Ball extends Entity {
     ellipse(xpos, ypos, w, h);
     xpos += xvel;
     ypos += yvel;
-
   }
 
-
- 
-  }
-  void checkCollisions(GameBoard board, Paddle paddle){
-    
+  void checkCollisions(GameBoard board, Paddle paddle)
+  {
   }
   void setState(int s)
   {
@@ -88,4 +84,3 @@ class Ball extends Entity {
     return state;
   }
 }
-
