@@ -1,4 +1,4 @@
-class TitleScreen extends Menu
+class Title extends Menu
 {
   
   // animation handling
@@ -7,8 +7,9 @@ class TitleScreen extends Menu
   int threshold = 6;
   int index = 0;
   PImage titlecard;
+  PFont font;
   
-  TitleScreen()
+  Title()
   {
     font = loadFont("Axis-32.vlw");
     for(int i=0; i<6; i++)
