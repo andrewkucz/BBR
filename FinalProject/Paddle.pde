@@ -1,80 +1,43 @@
-class Paddle {
- 
-  int xpos, ypos;
-  float xvel;
-  int padwidth;
-  int padheight;
-  color paddlecol;
-  int maxspeed = 4;
-  
-  int powerupstate;
+class Paddle extends Entity {
 
-  
-  
+
+  int speed = 4;
+
+  // Paddle power up (state definitions)
+  // 0 - Normal / nothing
+  // 1 - Longer paddle
+  // 2 - Faster paddle
+  // 3 - Galaga mode
+
+
+
   Paddle(int pw, int ph, int pus, color c) {
-        
-    padwidth = pw;
-    padheight = ph;
-    powerupstate = pus;
-    paddlecol = c;
+
+    w = pw;
+    h = ph;
+    state = pus;
+    col = c;
     xvel = 0;
-}
-  
- 
+  }
+
+
   void update() {
-    
-    fill(paddlecol);
+
+    fill(col);
     noStroke();
-    rect(xpos, ypos, padwidth, padheight);
-    
+    rect(xpos, ypos, w, h);
+
     xpos += xvel;
-    
-    if(leftpressed && rightpressed)
-    {
-      xvel = 0;
-    }
-    else if(leftpressed)
-    {
-      xvel = -maxspeed;
-    } 
-    else if (rightpressed)
-    {
-      xvel = maxspeed;
-    }
-    else
-    {
-      xvel = 0;
-    }
-    
-  }
-  
-  void setLocation(int x, int y)
-  {
-    xpos = x;
-    ypos = y;
-  }
-  int getX()
-  {
-    return xpos;
-  }
-  int getY()
-  {
-    return ypos;
+
   }
   
   
-  color getColor()
+  void setSpeed(int s)
   {
-    return paddlecol;
+    speed = s;
   }
-  void setColor(color c)
+  int getSpeed()
   {
-    paddlecol = c;
+    return speed;
   }
-  
-  void setMaxSpeed(int s)
-  {
-    maxspeed = s;
-  }
-  
 }

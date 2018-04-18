@@ -1,17 +1,18 @@
-class Ball {
-  float xpos, ypos;
-  float xvel, yvel;
-  PVector velocity;
-  int size = 20;
-  color ballcol = color(255, 0, 0);
+
+class Ball extends Entity {
+
   Pointer arrow;
+
+  // State definitions
+
+  // 0 - inactive / invisible
+  // 1 - visible, waiting to start (unmoving, attached to paddle)
+  // 2 - in action - bouncing around, checking for collisions
+  // 3 - dead (?)
+  
+  PVector velocity;
   float speed;
 
-  int state;
-  // 0 - inactive / invisible
-  // 1 - visible, waiting to start
-  // 2 - in action
-  // 3 - dead
 
   Ball()
   {
@@ -22,6 +23,7 @@ class Ball {
     speed = 2.0;
   }
 
+
   Ball(int s) 
   {
     state = s;
@@ -29,6 +31,9 @@ class Ball {
     {
       arrow = new Pointer();
     }
+    w = 20;
+    h = 20;
+    col = color(255, 0, 0);
     xvel = 0;
     yvel = 0;
     velocity = new PVector(0, 0);
@@ -39,7 +44,6 @@ class Ball {
 
   void update()
   { 
-
     if (state==1)
     {
       arrow.setLocation((int)xpos, (int)ypos);
@@ -58,44 +62,30 @@ class Ball {
       }
     }
 
-    fill(ballcol);
+
+    fill(col);
+
     noStroke();
-    ellipse(xpos, ypos, size, size);
+    ellipse(xpos, ypos, w, h);
     xpos += xvel;
     ypos += yvel;
+
+  }
+
+
+ 
   }
   void checkCollisions(GameBoard board, Paddle paddle){
     
   }
-
-  // Getters and setters
-
-  void setColor(color c)
+  void setState(int s)
   {
-    ballcol = c;
+    state = s;
   }
 
-  color getColor()
-  {
-    return ballcol;
-  }
-
-  void setLocation(int x, int y)
-  {
-    xpos = x;
-    ypos = y;
-  }
-
-  float getX()
-  {
-    return xpos;
-  }
-  float getY()
-  {
-    return ypos;
-  }
   int getState()
   {
     return state;
   }
 }
+

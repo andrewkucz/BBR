@@ -1,5 +1,7 @@
 Variable Information:
 
+000
+
 
 gamestate = 0 | main menu, game waiting to be initialized
 
@@ -10,6 +12,8 @@ gamestate = 2 | game paused (options: quit(gs=0) or resume (gs=1))
 gamestate = 3 | options menu
 
 gamestate = 4 | about screen
+
+gamestate = 5 | Name entry screen
 
 
 Powerup types:

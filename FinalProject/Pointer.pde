@@ -1,15 +1,13 @@
-class Pointer
+class Pointer extends Entity
 {
-  int xpos;
-  int ypos;
-  float endPosx;
-  float endPosy;
+
 
   int length = 60;
   int thickness = 2;
-
   float angle = 0;
   float angularvel = 0.02;
+  float endPosx;
+  float endPosy;
   float direction;  //1 = up, 0 = down (for 2 player mode)
 
   Pointer()
@@ -33,6 +31,7 @@ class Pointer
 
   void update()
   {
+
     endPosx = length * cos(angle);
     endPosy = length * sin(angle);
     //translate(xpos,ypos);

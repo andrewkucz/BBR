@@ -1,14 +1,10 @@
 Game game;
-boolean leftpressed, rightpressed;
-PFont font;
-
-
 
 void setup()
 {
-  size(1400,800);
+  size(1400, 800);
   background(0);
-  font = loadFont("Axis-32.vlw");
+
   frameRate(60);
   game = new Game();
 }
@@ -21,23 +17,15 @@ void draw()
 
 void keyPressed()
 {
-  if (key == CODED && (keyCode == RIGHT))
+  
+  if(game.nameentry.isValid(key) && game.getGameState() == 5)
   {
-    rightpressed = true;
+      game.nameentry.appendChar(key);
   }
-  if (key == CODED && (keyCode == LEFT))
+  else if (key == BACKSPACE && game.getGameState() == 5)
   {
-    leftpressed = true;
+      game.nameentry.removeChar();
   }
+  
 }
-void keyReleased()
-{
-  if (key == CODED && (keyCode == RIGHT))
-  {
-    rightpressed = false;
-  }
-  if (key == CODED && (keyCode == LEFT))
-  {
-    leftpressed = false;
-  }
-}
+

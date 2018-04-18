@@ -1,65 +1,59 @@
-class MenuButton extends Menu {
-  
-  int btnheight, btnwidth;
-  int xpos, ypos;
-  String label;
-  color textColor;
-  color btnColor;
-  
-  boolean hover;
+class MenuButton extends Entity {
 
+  color textColor = color(0);
+  boolean hover;  
+  String label;
+  PFont font = loadFont("ArcadeNormal-48.vlw");
+  int textsize = 24;
   
+
   MenuButton(String l)
   {
-    btnheight = super.mheight/13;
-    btnwidth = super.mwidth/2;
+    col = color(255);
+    h = (height-20)/13;
+    w = 588/2;
+    xpos = ((width-588)/2) + (((588/2) - w)/2) + (w/2);
     label = l;
-    textColor = color(0);
-    btnColor = color(255);
-    xpos = super.xpos + ((super.mwidth - btnwidth)/2);
     hover = false;
   }
-  
-  
+ 
+
+
   void update()
   {
-    if(mouseX >= xpos && mouseX <= xpos+btnwidth && mouseY >= ypos && mouseY <= ypos+btnheight)
+    if (mouseX >= xpos && mouseX <= xpos+w && mouseY >= ypos && mouseY <= ypos+h)
     {
-      hover = true;      
-    }
-    else
+      hover = true;
+    } else
     {
       hover = false;
     }
-    
-    if(hover)
+
+    if (hover)
     {
-      fill(200,200,200);
+      fill(200, 200, 200);
       stroke(255);
-    }
-    else
+    } else
     {
-      fill(btnColor);
+      fill(col);
       stroke(0);
     }
     strokeWeight(2);
-    rect(xpos, ypos, btnwidth, btnheight);
+    rect(xpos, ypos, w, h);
     fill(textColor);
-    textSize(btnheight/2);
     textAlign(CENTER);
     textFont(font);
-    text(label, xpos+(btnwidth/2), ypos+(btnheight/2)+(btnheight*0.2)); 
+    textSize(textsize);
+    text(label, xpos+(w/2), ypos+(h/2)+(h*0.2));
   }
-  
+
   void setY(int y)
   {
     ypos = y;
   }
-  
+
   boolean isHovered()
   {
     return hover;
   }
-  
-  
 }
