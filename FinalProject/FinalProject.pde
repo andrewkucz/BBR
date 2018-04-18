@@ -9,7 +9,7 @@ void setup()
   size(1400,800);
   background(0);
   font = loadFont("Axis-32.vlw");
-  
+  frameRate(60);
   game = new Game();
 }
 
