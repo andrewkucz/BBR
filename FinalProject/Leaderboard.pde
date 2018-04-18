@@ -76,6 +76,7 @@ class Leaderboard extends Entity {
     {
       board.remove(board.size()-1);
     }
+    writeFile();
   }
 
 

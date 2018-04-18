@@ -36,3 +36,8 @@ void keyReleased()
 {
   
 }
+
+void mousePressed()
+{
+  game.clicked = true;
+}
