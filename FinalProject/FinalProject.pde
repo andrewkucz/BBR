@@ -5,6 +5,7 @@ void setup()
   size(1400, 800);
   background(0);
 
+  frameRate(60);
   game = new Game();
 }
 
@@ -28,9 +29,3 @@ void keyPressed()
   
 }
 
-
-
-
-void keyReleased()
-{
-}

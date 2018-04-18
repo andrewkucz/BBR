@@ -56,4 +56,5 @@ class Brick extends Entity {
   {
     return state;
   }
+
 }
