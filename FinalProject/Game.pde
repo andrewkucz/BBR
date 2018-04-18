@@ -112,6 +112,9 @@ class Game {
         b.setLocation(paddle.xpos+paddle.padwidth/2, paddle.ypos-balls.get(0).size/2);
       }
       b.update();
+      
+      //ball collison checking with bounds and bricks
+      b.checkCollisions(board, paddle);
     }
  }
   
