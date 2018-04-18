@@ -3,6 +3,7 @@ class Game {
   Title titlescreen;
   Menu pausemenu;
   Menu optionsmenu;
+  Menu gamemodemenu, twoplayermenu;
   Screen about;
   NameEntry nameentry;
   GameBoard board;
@@ -98,6 +99,14 @@ class Game {
     pausemenu.addButton("Quit");
     
     nameentry = new NameEntry();
+    
+    gamemodemenu = new Menu();
+    gamemodemenu.addButton("1 Player");
+    gamemodemenu.addButton("2 Player");
+    
+    gamemodemenu = new Menu();
+    gamemodemenu.addButton("1 Player");
+    gamemodemenu.addButton("2 Player");
   }
 
 
