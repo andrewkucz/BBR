@@ -46,15 +46,4 @@ class Brick extends Entity {
       state--;
   }
 
-
-  void setState(int s)
-  {
-    state = s;
-  }
-
-  int getState()
-  {
-    return state;
-  }
-
 }
