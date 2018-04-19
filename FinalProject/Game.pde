@@ -5,7 +5,7 @@ class Game {
   Menu optionsmenu;
   Menu gamemodemenu, twoplayermenu;
   Screen about;
-  NameEntry nameentry, nameentryp1, nameentryp2;
+  NameEntry nameentry;
   GameBoard board;
 
   boolean initialized = false;
@@ -79,8 +79,10 @@ class Game {
       twoplayermenu.update();
       break;
     case 8: 
+      nameentry.update();
       break;
-    case 9: 
+    case 9:
+      nameentry.update();
       break;
     case 10: 
       break;
@@ -149,8 +151,6 @@ class Game {
     pausemenu.addButton("Quit");
 
     nameentry = new NameEntry("ENTER INITIALS");
-    nameentryp1 = new NameEntry("ENTER P1 TAG");
-    nameentryp2 = new NameEntry("ENTER P2 TAG");
 
     gamemodemenu = new Menu();
     gamemodemenu.addButton("1 PLAYER");
@@ -227,7 +227,6 @@ class Game {
       pausemenu.active = false;
       background(0);
     }
-
     // Pause menu quit is clicked
     else if (gamestate == 2 && pausemenu.buttons.get(1).isHovered() && clicked)
     {
@@ -236,53 +235,90 @@ class Game {
       pausemenu.active = false;
       background(0);
     }
-
-    // Name entry menu ok is clicked
+    // Single player name entry menu "OK" is clicked
     else if (gamestate == 5 && nameentry.ok.isHovered() && clicked && nameentry.name[2] != ' ')
     {
       gamestate = 1;
       playername = new String(nameentry.name);
     }
-
-    // Name entry menu back is clicked 
+    // Single player name entry menu "BACK" is clicked 
     else if (gamestate == 5 && nameentry.back.isHovered() && clicked)
     {
       gamestate = 6;
+      if(gamemode==2)
+      {
+        gamestate = 7;
+      }
     }
-
-    // game mode menu 1 player is clicked 
+    // Gamemode menu "1 Player" is clicked
     else if (gamestate == 6 && gamemodemenu.buttons.get(0).isHovered() && clicked)
     {
+      nameentry.setDirections("ENTER INITIALS");
+      nameentry.cleararr();
       gamestate = 5;
     }
-    // game mode menu 2 player is clicked 
+    // Gamemode menu "2 Player" is clicked
     else if (gamestate == 6 && gamemodemenu.buttons.get(1).isHovered() && clicked)
     {
       gamestate = 7;
     }
-    // game mode menu back is clicked 
+    // Gamemode menu "Back" is clicked
     else if (gamestate == 6 && gamemodemenu.buttons.get(2).isHovered() && clicked)
     {
       gamestate = 0;
     }
-    // 2 player co-op is clicked
+    // 2 player menu "co-op" is clicked
     else if (gamestate == 7 && twoplayermenu.buttons.get(0).isHovered() && clicked)
     {
-      gamestate = 1;
+      gamestate = 5;
+      nameentry.setDirections("ENTER TEAM TAG");
+      nameentry.cleararr();
       gamemode = 2;
       initGameComponents();
     }
-    // 2 player battle is clicked
+    // 2 player menu "battle" is clicked
     else if (gamestate == 7 && twoplayermenu.buttons.get(1).isHovered() && clicked)
     {
       //gamemode = 3;
-      //initGameComponents(gamemode);
+      nameentry.setDirections("ENTER P1 TAG");
+      nameentry.cleararr();
+      gamestate = 8;
     }
-    // 2 player baack is clicked
+    // 2 player menu "back" is clicked
     else if (gamestate == 7 && twoplayermenu.buttons.get(2).isHovered() && clicked)
     {
       gamestate = 6;
     }
+    // 2 player 1st player name entry screen "OK" is clicked
+    else if (gamestate == 8 && nameentry.ok.isHovered() && clicked && nameentry.name[2] != ' ')
+    {
+      gamestate = 9;
+      playername = new String(nameentry.name);
+      nameentry.setDirections("ENTER P2 TAG");
+      nameentry.cleararr();
+    }
+    // 2 player 2nd player name entry screen "OK" is clicked
+    else if (gamestate == 9 && nameentry.ok.isHovered() && clicked && nameentry.name[2] != ' ')
+    {
+      gamestate = 1;
+      playername2 = new String(nameentry.name);
+    }
+    // 2 player 2nd player name entry screen "BACK" is clicked
+    else if (gamestate == 9 && nameentry.back.isHovered() && clicked)
+    {
+      gamestate = 8;
+      nameentry.setDirections("ENTER P1 TAG");
+      nameentry.name[0] = playername.charAt(0);
+      nameentry.name[1] = playername.charAt(1);
+      nameentry.name[2] = playername.charAt(2);
+      nameentry.cursor = 2;
+    }
+    // 2 player 1st player name entry screen "BACK" is clicked
+    else if (gamestate == 8 && nameentry.back.isHovered() && clicked)
+    {
+      gamestate = 7;
+    }
+
 
     clicked = false;
   }

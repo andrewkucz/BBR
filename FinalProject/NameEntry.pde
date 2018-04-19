@@ -30,6 +30,20 @@ class NameEntry extends Screen { //<>//
     ok.setY(13*h/20);
     back.setY(8*h/10);
   }
+  
+  void setDirections(String s)
+  {
+    directions = s;
+  }
+  
+  void cleararr()
+  {
+    name[0] = ' ';
+    name[1] = ' ';
+    name[2] = ' ';
+    cursor = -1;
+  }
+  
 
   void update()
   {
