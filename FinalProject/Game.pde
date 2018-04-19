@@ -239,6 +239,8 @@ class Game {
     else if (gamestate == 5 && nameentry.ok.isHovered() && clicked && nameentry.name[2] != ' ')
     {
       gamestate = 1;
+      gamemode = 1;
+      initGameComponents();
       playername = new String(nameentry.name);
     }
     // Single player name entry menu "BACK" is clicked 
