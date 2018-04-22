@@ -33,7 +33,7 @@ class Game {
 
 
   Game() {
-    gamestate = 0;
+    gamestate = 1;
     score = 0;
     numLives = 3;
     gamemode = 1;
@@ -177,11 +177,13 @@ class Game {
     for (Ball b : balls) {
       if (b.getState() == 1)
       {
-        //b.setLocation(paddle.xpos+paddle.w/2, paddle.ypos-balls.get(0).h/2);
+        b.setLocation(paddle.xpos+paddle.w/2, paddle.ypos-balls.get(0).h/2);
       }
+      
       b.update();
 
       //ball collison checking with bounds and bricks
+      if(b.state == 2)
       b.checkCollisions(board, paddle);
     }
   }
