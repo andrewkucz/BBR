@@ -12,6 +12,7 @@ class GameBoard extends Screen {
 
   // board level
   int level;
+ //boolean hasDrawn = false;
 
 
   GameBoard(int l) {
@@ -48,8 +49,11 @@ class GameBoard extends Screen {
 
     noStroke();
     fill(col);
+    //if(!hasDrawn){
     rect(xpos, ypos, w, h);
-
+    //hasDrawn = true;  
+    //}
+  
     for (int i = 0; i<rows; i++)
     {
       for (int j = 0; j<cols; j++)
@@ -62,6 +66,7 @@ class GameBoard extends Screen {
         }
       }
     }
+    
   }
 
   boolean isEmpty()

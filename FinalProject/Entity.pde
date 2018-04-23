@@ -1,12 +1,12 @@
 abstract class Entity {
 
-  int xpos, ypos;
+  float xpos, ypos;
   int w, h;
   int state;
   float xvel, yvel;
   color col;
 
-  void setLocation(int x, int y)
+  void setLocation(float x, float y)
   {
     xpos = x;
     ypos = y;
@@ -48,12 +48,12 @@ abstract class Entity {
     return col;
   }
 
-  int getX()
+  float getX()
   {
     return xpos;
   }
 
-  int getY()
+  float getY()
   {
     return ypos;
   }
