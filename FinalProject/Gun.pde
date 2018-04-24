@@ -47,10 +47,10 @@ class Gun extends Entity {
   {
     for (Bullet bul : bullets)
     {
-      if (b.getBrick(bul.xpos, bul.ypos).getState() > 0)
+      if (b.getBrick((int)bul.xpos, (int)bul.ypos).getState() > 0)
       {
         bul.setState(0);
-        b.getBrick(bul.xpos, bul.ypos).hit();
+        b.getBrick((int)bul.xpos, (int)bul.ypos).hit();
       } else if (bul.ypos < 0)
       {
         bul.setState(0);
@@ -60,6 +60,6 @@ class Gun extends Entity {
 
   void spawnBullet()
   {
-    bullets.add(new Bullet(xpos+(w/2), ypos-h));
+    bullets.add(new Bullet((int)xpos+(w/2), (int)ypos-h));
   }
 }

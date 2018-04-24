@@ -40,7 +40,7 @@ class Ball extends Entity {
     xvel = 0;
     yvel = 0;
     velocity = new PVector(0, 0);
-    speed = 5;
+    speed = 12;
   }  
 
 

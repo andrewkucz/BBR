@@ -56,9 +56,9 @@ class Brick extends Entity {
     } 
       state--;
       col = color(0, 0, map(state, 1, 3, 30, 255));
+    }
   }
   int getState() {
     return state;
   }
 }
-
