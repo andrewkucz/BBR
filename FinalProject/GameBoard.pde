@@ -51,7 +51,7 @@ class GameBoard extends Screen {
            {
              powerups.add(p);
            }
-          board[i][j] = new Brick(xpos+(gap*(j+1))+(brickw*j), ypos+(gap*(i+1))+(brickh*i), (i/2)+1, l, p);
+          board[i][j] = new Brick(xpos+(gap*(j+1))+(brickw*j), ypos+(gap*(i+1))+(brickh*i), 4-((i/2)+1), l, p);
           board[i][j].w = brickw;
           board[i][j].h = brickh;
         }

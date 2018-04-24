@@ -6,6 +6,7 @@ class Bullet extends Entity {
   
   Bullet(int x, int y)
   {
+    super();
     yvel = -6;
     h=13;
     w=13;

@@ -10,6 +10,7 @@ class Leaderboard extends Entity {
 
   Leaderboard(int x, int y)
   {
+    super();
     w = (width-588)/2;
     h = (height)/3;
     xpos = x;
