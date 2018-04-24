@@ -40,7 +40,7 @@ class Ball extends Entity {
     xvel = 0;
     yvel = 0;
     velocity = new PVector(0, 0);
-    speed = 15;
+    speed = 5;
   }  
 
 
@@ -81,74 +81,98 @@ class Ball extends Entity {
   }
   int checkCollisions(GameBoard board, Paddle paddle, float mult) {  //may have to optimize this in order to keep up with frames
     PVector newVel = new PVector(xvel, yvel);
-    ////println(newVel.x + " " + newVel.y);
     newVel.normalize();
     newVel.mult(mult);  //if this is a recursive call, we only want to move the ball a portion of its normal velocity
     float tempx = this.xpos + newVel.x;  //where we would move the ball if there weren't any collisions
     float tempy = this.ypos + newVel.y;
-
     float slope = newVel.y/newVel.x;
+
     int changed = 0;  //0 for no collisions, 1 to invert x, 2 to invert y;
     float newMult = 0; //maximize this to get closest collision point
-    float x2, y2;
+    float x2 = tempx;
+    float y2 = tempy;  //position of new spot for ball to be...
     PVector collisionVector;
 
+    float x2temp, y2temp;
+    float newMultTemp;
     //collison with board boundaries
     if (tempx > (board.w + board.xpos - w/2)) {//collision with Right side of boar
       //move to point of collision
-      x2 = (board.w + board.xpos - w/2);
-      y2 = slope * (x2 - xpos) + ypos;
+      x2temp = (board.w + board.xpos - w/2);
+      y2temp = slope * (x2temp - xpos) + ypos;
       //debugging 
       fill(200, 0, 0);
-      ellipse(x2, y2, 20, 20);
+      //ellipse(x2temp, y2temp, 20, 20);
 
       //println(x2 +" " +y2);
       //println(xpos + " " + ypos);
 
-      collisionVector = new PVector(x2 - xpos, y2-ypos);
+      collisionVector = new PVector(x2temp - xpos, y2temp-ypos);
       ////println("New Vector: " + collisionVector.x + " " + collisionVector.y);
-      this.xpos = x2;
-      this.ypos = y2;
-      newMult = (newVel.mag() - collisionVector.mag());//only get the unused portion of the vector to recursively call the function
+      //this.xpos = x2;
+      //this.ypos = y2;
+      newMultTemp = (newVel.mag() - collisionVector.mag());//only get the unused portion of the vector to recursively call the function
+      if (newMultTemp > newMult) {
+        //handle setting neccessary collision handlers here
+        newMult = newMultTemp;
+        x2 = x2temp;
+        y2 = y2temp;
+        changed = 1;
+      }
 
       ////println("newMult: "+ newMult);
       //adjust velocity
-      this.xvel *= -1;
+      //this.xvel *= -1;
       //get length of next vector and call check Collisions again
-      checkCollisions(board, paddle, newMult);
-      return 1;  //not sure
+      //checkCollisions(board, paddle, newMult);
+      //return 1;  //not sure
     } else if (tempx < board.xpos + w/2) {
 
-      x2 = board.xpos + w/2;
-      y2 = slope * (x2 - xpos) + ypos;
+      x2temp = board.xpos + w/2;
+      y2temp = slope * (x2temp - xpos) + ypos;
 
       fill(200, 0, 0);
-      ellipse(x2, y2, 20, 20);
+      //ellipse(x2temp, y2temp, 20, 20);
 
-      collisionVector = new PVector(x2 - xpos, y2-ypos);
-      this.xpos = x2;
-      this.ypos = y2;
-      newMult = (newVel.mag() - collisionVector.mag());
-      this.xvel *= -1;
+      collisionVector = new PVector(x2temp - xpos, y2temp-ypos);
+      //this.xpos = x2;
+      //this.ypos = y2;
+      newMultTemp = (newVel.mag() - collisionVector.mag());
+      if (newMultTemp > newMult) {
+        //handle setting neccessary collision handlers here
+        newMult = newMultTemp;
+        x2 = x2temp;
+        y2 = y2temp;
+        changed = 1;
+      }
 
-      checkCollisions(board, paddle, newMult);
-      return 1;
+      //this.xvel *= -1;
+
+      //checkCollisions(board, paddle, newMult);
+      //return 1;
     } else if (tempy < board.ypos + w/2) {
 
-      y2 = board.ypos + w/2;
-      x2 = (y2-ypos)/slope + xpos;
+      y2temp = board.ypos + w/2;
+      x2temp = (y2temp-ypos)/slope + xpos;
 
       fill(200, 0, 0);
-      ellipse(x2, y2, 20, 20);
+      //ellipse(x2temp, y2temp, 20, 20);
 
-      collisionVector = new PVector(x2 - xpos, y2-ypos);
-      this.xpos = x2;
-      this.ypos = y2;
-      newMult = (newVel.mag() - collisionVector.mag());
-      this.yvel *= -1;
+      collisionVector = new PVector(x2temp - xpos, y2temp-ypos);
+      //this.xpos = x2;
+      //this.ypos = y2;
+      newMultTemp = (newVel.mag() - collisionVector.mag());
+      if (newMultTemp > newMult) {
+        //handle setting neccessary collision handlers here
+        newMult = newMultTemp;
+        x2 = x2temp;
+        y2 = y2temp;
+        changed = 2;
+      }
+      //this.yvel *= -1;
 
-      checkCollisions(board, paddle, newMult);
-      return 1;
+      //checkCollisions(board, paddle, newMult);
+      //return 1;
     } else if (ypos > board.ypos + board.h - w/2) {
       yvel = -abs(yvel);
       //return 0; //remove ball from array
@@ -179,70 +203,98 @@ class Ball extends Entity {
       //move to collision point
 
       if (closestPointx == paddle.xpos) {  //left side
-        x2 = (closestPointx - w/2);
-        y2 = slope * (x2 - xpos) + ypos;
+        x2temp = (closestPointx - w/2);
+        y2temp = slope * (x2temp - xpos) + ypos;
         //println("Previous point: " + "(" + xpos + ", " + ypos + ")");
         //println("New point: " + "(" + x2 + ", " + y2 + ")");
         //fill(0, 200, 0);
         //ellipse(x2, y2, 20, 20);
 
-        collisionVector = new PVector(x2 - xpos, y2-ypos);
-        this.xpos = x2;
-        this.ypos = y2;
-        newMult = (newVel.mag() - collisionVector.mag());
-        this.xvel *= -1;
-        checkCollisions(board, paddle, newMult);
-        return 1;
+        collisionVector = new PVector(x2temp - xpos, y2temp-ypos);
+        //this.xpos = x2;
+        //this.ypos = y2;
+        newMultTemp = (newVel.mag() - collisionVector.mag());
+        if (newMultTemp > newMult) {
+          //handle setting neccessary collision handlers here
+          newMult = newMultTemp;
+          x2 = x2temp;
+          y2 = y2temp;
+          changed = 1;
+        }
+        //this.xvel *= -1;
+        //checkCollisions(board, paddle, newMult);
+        //return 1;
       }
       if (closestPointx == paddle.xpos + paddle.w) {  //right side
-        x2 = (closestPointx + w/2);
-        y2 = slope * (x2 - xpos) + ypos;
+        x2temp = (closestPointx + w/2);
+        y2temp = slope * (x2temp - xpos) + ypos;
         println("Previous point: " + "(" + xpos + ", " + ypos + ")");
-        println("New point: " + "(" + x2 + ", " + y2 + ")");
+        println("New point: " + "(" + x2temp + ", " + y2temp + ")");
         fill(0, 200, 0);
-        ellipse(x2, y2, 20, 20);
+        //ellipse(x2temp, y2temp, 20, 20);
 
-        collisionVector = new PVector(x2 - xpos, y2-ypos);
-        this.xpos = x2;
-        this.ypos = y2;
-        newMult = (newVel.mag() - collisionVector.mag());
-        this.yvel *= -1;
-        checkCollisions(board, paddle, newMult);
-        return 1;
+        collisionVector = new PVector(x2temp - xpos, y2temp-ypos);
+        //this.xpos = x2;
+        //this.ypos = y2;
+        newMultTemp = (newVel.mag() - collisionVector.mag());
+        if (newMultTemp > newMult) {
+          //handle setting neccessary collision handlers here
+          newMult = newMultTemp;
+          x2 = x2temp;
+          y2 = y2temp;
+          changed = 1;
+        }
+        //this.yvel *= -1;
+        //checkCollisions(board, paddle, newMult);
+        //return 1;
       }
       if (closestPointy == paddle.ypos) {  //top
 
         println("PADDLE COLLISION TOP");
-        y2 = closestPointy - w/2;
-        x2 = (y2 -ypos) /slope + xpos;
+        y2temp = closestPointy - w/2;
+        x2temp = (y2temp -ypos) /slope + xpos;
         println("Previous point: " + "(" + xpos + ", " + ypos + ")");
-        println("New point: " + "(" + x2 + ", " + y2 + ")");
+        println("New point: " + "(" + x2temp + ", " + y2temp + ")");
         fill(0, 200, 0);
-        ellipse(x2, y2, 20, 20);
+        //ellipse(x2temp, y2temp, 20, 20);
 
-        collisionVector = new PVector(x2 - xpos, y2-ypos);
-        this.xpos = x2;
-        this.ypos = y2;
-        newMult = (newVel.mag() - collisionVector.mag());
-        this.yvel *= -1;
-        checkCollisions(board, paddle, newMult);
-        return 1;
+        collisionVector = new PVector(x2temp - xpos, y2temp-ypos);
+        //this.xpos = x2;
+        //this.ypos = y2;
+        newMultTemp = (newVel.mag() - collisionVector.mag());
+        if (newMultTemp > newMult) {
+          //handle setting neccessary collision handlers here
+          newMult = newMultTemp;
+          x2 = x2temp;
+          y2 = y2temp;
+          changed = 2;
+        }
+        //this.yvel *= -1;
+        //checkCollisions(board, paddle, newMult);
+        //return 1;
       }
       if (closestPointy == paddle.ypos + paddle.h) {  //bottom
-        y2 = closestPointy + w/2;
-        x2 = (y2 -ypos) /slope + xpos;
+        y2temp = closestPointy + w/2;
+        x2temp = (y2temp -ypos) /slope + xpos;
         println("Previous point: " + "(" + xpos + ", " + ypos + ")");
-        println("New point: " + "(" + x2 + ", " + y2 + ")");
+        println("New point: " + "(" + x2temp + ", " + y2temp + ")");
         fill(0, 200, 0);
-        ellipse(x2, y2, 20, 20);
+        //ellipse(x2temp, y2temp, 20, 20);
 
-        collisionVector = new PVector(x2 - xpos, y2-ypos);
-        this.xpos = x2;
-        this.ypos = y2;
-        newMult = (newVel.mag() - collisionVector.mag());
-        this.yvel *= -1;
-        checkCollisions(board, paddle, newMult);
-        return 1;
+        collisionVector = new PVector(x2temp - xpos, y2temp-ypos);
+        //this.xpos = x2;
+        //this.ypos = y2;
+        newMultTemp = (newVel.mag() - collisionVector.mag());
+        if (newMultTemp > newMult) {
+          //handle setting neccessary collision handlers here
+          newMult = newMultTemp;
+          x2 = x2temp;
+          y2 = y2temp;
+          changed = 2;
+        }
+        //this.yvel *= -1;
+        //checkCollisions(board, paddle, newMult);
+        //return 1;
       }
 
       //adjust velocity
@@ -269,87 +321,131 @@ class Ball extends Entity {
         //println("Collision Factor: " + ((tempx- closestPointx) * (tempx - closestPointx) + (tempy - closestPointy) * (tempy - closestPointy)));
         //println("must be less than " + (w/2 * w/2));
         //println("--------------------------");
-        if (((tempx- closestPointx) * (tempx - closestPointx) + (tempy - closestPointy) * (tempy - closestPointy)) < (w/2 * w/2)) {  //Collision!
-          println("Collision! ");
+        if (((tempx- closestPointx) * (tempx - closestPointx) + (tempy - closestPointy) * (tempy - closestPointy)) < (w/2 * w/2) && temp.getState() != 0) {  //Collision!
+          println("Collision! Ball: " + i + ", " + j);
+          println("State was " + temp.getState());
+          
+          temp.hit();
+          println("State is " + temp.getState());
           //move to collision point
 
           if (closestPointx == temp.xpos) {  //left side
-            x2 = (closestPointx - w/2);
-            y2 = slope * (x2 - xpos) + ypos;
-            println("Previous point: " + "(" + xpos + ", " + ypos + ")");
-            println("New point: " + "(" + x2 + ", " + y2 + ")");
+            x2temp = (closestPointx - w/2);
+            y2temp = slope * (x2temp - xpos) + ypos;
+            //println("Previous point: " + "(" + xpos + ", " + ypos + ")");
+            //println("New point: " + "(" + x2temp + ", " + y2temp + ")");
             fill(0, 200, 0);
-            ellipse(x2, y2, 20, 20);
+            //ellipse(x2temp, y2temp, 20, 20);
 
-            collisionVector = new PVector(x2 - xpos, y2-ypos);
-            this.xpos = x2;
-            this.ypos = y2;
-            newMult = (newVel.mag() - collisionVector.mag());
-            this.xvel *= -1;
-            checkCollisions(board, paddle, newMult);
-            return 1;
+            collisionVector = new PVector(x2temp - xpos, y2temp-ypos);
+            //this.xpos = x2;
+            //this.ypos = y2;
+            newMultTemp = (newVel.mag() - collisionVector.mag());
+            if (newMultTemp > newMult) {
+              //handle setting neccessary collision handlers here
+              newMult = newMultTemp;
+              x2 = x2temp;
+              y2 = y2temp;
+              changed = 1;
+            }
+            //this.xvel *= -1;
+            //checkCollisions(board, paddle, newMult);
+            //return 1;
           }
           if (closestPointx == temp.xpos + temp.w) {  //right side
-            x2 = (closestPointx + w/2);
-            y2 = slope * (x2 - xpos) + ypos;
-            println("Previous point: " + "(" + xpos + ", " + ypos + ")");
-            println("New point: " + "(" + x2 + ", " + y2 + ")");
+            x2temp = (closestPointx + w/2);
+            y2temp = slope * (x2temp - xpos) + ypos;
+            //println("Previous point: " + "(" + xpos + ", " + ypos + ")");
+            //println("New point: " + "(" + x2temp + ", " + y2temp + ")");
             fill(0, 200, 0);
-            ellipse(x2, y2, 20, 20);
+            //ellipse(x2temp, y2temp, 20, 20);
 
-            collisionVector = new PVector(x2 - xpos, y2-ypos);
-            this.xpos = x2;
-            this.ypos = y2;
-            newMult = (newVel.mag() - collisionVector.mag());
-            this.yvel *= -1;
-            checkCollisions(board, paddle, newMult);
-            return 1;
+            collisionVector = new PVector(x2temp - xpos, y2temp-ypos);
+            //this.xpos = x2;
+            //this.ypos = y2;
+            newMultTemp = (newVel.mag() - collisionVector.mag());
+            if (newMultTemp > newMult) {
+              //handle setting neccessary collision handlers here
+              newMult = newMultTemp;
+              x2 = x2temp;
+              y2 = y2temp;
+              changed = 1;
+            }
+            //this.yvel *= -1;
+            //checkCollisions(board, paddle, newMult);
+            //return 1;
           }
           if (closestPointy == temp.ypos) {  //top
 
-            println("PADDLE COLLISION TOP");
-            y2 = closestPointy - w/2;
-            x2 = (y2 -ypos) /slope + xpos;
-            println("Previous point: " + "(" + xpos + ", " + ypos + ")");
-            println("New point: " + "(" + x2 + ", " + y2 + ")");
+            //println("PADDLE COLLISION TOP");
+            y2temp = closestPointy - w/2;
+            x2temp = (y2temp -ypos) /slope + xpos;
+            //println("Previous point: " + "(" + xpos + ", " + ypos + ")");
+            //println("New point: " + "(" + x2temp + ", " + y2temp + ")");
             fill(0, 200, 0);
-            ellipse(x2, y2, 20, 20);
+            //ellipse(x2temp, y2temp, 20, 20);
 
-            collisionVector = new PVector(x2 - xpos, y2-ypos);
-            this.xpos = x2;
-            this.ypos = y2;
-            newMult = (newVel.mag() - collisionVector.mag());
-            this.yvel *= -1;
-            checkCollisions(board, paddle, newMult);
-            return 1;
+            collisionVector = new PVector(x2temp - xpos, y2temp-ypos);
+            //this.xpos = x2;
+            //this.ypos = y2;
+            newMultTemp = (newVel.mag() - collisionVector.mag());
+            if (newMultTemp > newMult) {
+              //handle setting neccessary collision handlers here
+              newMult = newMultTemp;
+              x2 = x2temp;
+              y2 = y2temp;
+              changed = 2;
+            }
+            //this.yvel *= -1;
+            //checkCollisions(board, paddle, newMult);
+            //return 1;
           }
           if (closestPointy == temp.ypos + temp.h) {  //bottom
-            y2 = closestPointy + w/2;
-            x2 = (y2 -ypos) /slope + xpos;
+            y2temp = closestPointy + w/2;
+            x2temp = (y2temp - ypos) /slope + xpos;
             //println("Previous point: " + "(" + xpos + ", " + ypos + ")");
             //println("New point: " + "(" + x2 + ", " + y2 + ")");
             fill(0, 200, 0);
-            ellipse(x2, y2, 20, 20);
+            //ellipse(x2temp, y2temp, 20, 20);
 
-            collisionVector = new PVector(x2 - xpos, y2-ypos);
-            this.xpos = x2;
-            this.ypos = y2;
-            newMult = (newVel.mag() - collisionVector.mag());
-            this.yvel *= -1;
-            checkCollisions(board, paddle, newMult);
-            return 1;
+            collisionVector = new PVector(x2temp - xpos, y2temp-ypos);
+            //this.xpos = x2;
+            //this.ypos = y2;
+            newMultTemp = (newVel.mag() - collisionVector.mag());
+            if (newMultTemp > newMult) {
+              //handle setting neccessary collision handlers here
+              newMult = newMultTemp;
+              x2 = x2temp;
+              y2 = y2temp;
+              changed = 2;
+            }
+            //this.yvel *= -1;
+            //checkCollisions(board, paddle, newMult);
+            //return 1;
           }
 
           //adjust velocity
         }
       }
     }
+  //TODO: DEAL With x2, y2, and newMult
 
-
-
-
-    xpos = tempx;
-    ypos = tempy;
+xpos = x2;
+      ypos = y2;
+    if (newMult != 0){  //no collision woohoo
+      if(changed == 1){
+       xvel *= -1;
+       
+      }
+      else if(changed == 2){
+       yvel *= -1; 
+      }
+      checkCollisions(board,paddle,newMult);
+      
+    }
+    else {
+      //checkCollisions(board,paddle,newMult);
+    }
 
     return 1; //if all collisions are normal
   }

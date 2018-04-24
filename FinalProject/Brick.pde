@@ -35,6 +35,7 @@ class Brick extends Entity {
 
   void update()
   {
+    fill(col);
     rect(xpos, ypos, w, h);
     power.update();
   }
@@ -42,8 +43,12 @@ class Brick extends Entity {
 
   void hit()
   {
+  
     if (state>0)
       state--;
+      col = color(0, 0, map(state, 1, 3, 30, 255));
   }
-
+  int getState() {
+    return state;
+  }
 }
