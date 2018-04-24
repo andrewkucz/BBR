@@ -12,9 +12,9 @@ class Pointer extends Entity
 
   Pointer()
   {
+    super();
     xpos = 0;
     ypos = 0;
-
     direction = 1;
     angle = -PI/2;
   }

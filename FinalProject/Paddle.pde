@@ -17,7 +17,7 @@ class Paddle extends Entity {
   int duration = 750;
 
   Paddle(int pw, int ph, int pus, color c) {
-
+    super();
     w = pw;
     h = ph;
     state = pus;
@@ -29,7 +29,7 @@ class Paddle extends Entity {
 
   void update() {
     
-    println(state);
+    //println(state);
     
     if(counter<=duration)
     {

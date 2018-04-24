@@ -15,10 +15,12 @@ class Ball extends Entity {
 
   PVector velocity;
   float speed;
+  float speedinc = 0.02;
 
 
   Ball()
   {
+    super();
     state = 0;
     xvel = 0;
     yvel = 0;
@@ -40,7 +42,7 @@ class Ball extends Entity {
     xvel = 0;
     yvel = 0;
     velocity = new PVector(0, 0);
-    speed = 12;
+    speed = 5;
   }  
 
 
@@ -245,12 +247,10 @@ class Ball extends Entity {
         collisionVector = new PVector(xpos - closestPointx, ypos - closestPointy);
 
         if (((tempx- closestPointx) * (tempx - closestPointx) + (tempy - closestPointy) * (tempy - closestPointy)) < (w/2 * w/2) && temp.getState() != 0) {  //Collision!
-          println("Collision! Ball: " + i + ", " + j);
-          println("State was " + temp.getState());
+          speed += speedinc;
+          println(speed);
 
           temp.hit();
-          println("State is " + temp.getState());
-          //move to collision point
 
           if (closestPointx == temp.xpos) {  //left side
             x2temp = (closestPointx - w/2);

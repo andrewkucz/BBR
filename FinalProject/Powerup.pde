@@ -31,6 +31,7 @@ class Powerup extends Entity {
 
   Powerup(int x, int y)
   {
+    super();
     w = 14;
     h = 14;
     xpos = x;
