@@ -35,6 +35,7 @@ class Brick extends Entity {
 
   void update()
   {
+
     if(state>0)
     {
       fill(col);
@@ -47,16 +48,17 @@ class Brick extends Entity {
 
   void hit()
   {
+  
+    if (state>0){
     if(state==1)
     {
       power.setYVel(3);
+    } 
       state--;
-    }  
-    else if (state>1)
-    {
-      state--;
-    }
-    
+      col = color(0, 0, map(state, 1, 3, 30, 255));
   }
-
+  int getState() {
+    return state;
+  }
 }
+

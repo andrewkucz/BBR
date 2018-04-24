@@ -16,6 +16,7 @@ class GameBoard extends Screen {
 
   // board level
   int level;
+ //boolean hasDrawn = false;
 
 
   GameBoard() {
@@ -65,8 +66,11 @@ class GameBoard extends Screen {
     background(0);
     noStroke();
     fill(col);
+    //if(!hasDrawn){
     rect(xpos, ypos, w, h);
-
+    //hasDrawn = true;  
+    //}
+  
     for (int i = 0; i<rows; i++)
     {
       for (int j = 0; j<cols; j++)
@@ -75,6 +79,7 @@ class GameBoard extends Screen {
       }
     }
     
+
     for(int i=0; i<powerups.size(); i++)
     {
       if(powerups.get(i).getState() == 0)
@@ -86,7 +91,6 @@ class GameBoard extends Screen {
       powerups.get(i).update();
       }
     }
-    
   }
 
 
