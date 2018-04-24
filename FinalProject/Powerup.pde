@@ -7,7 +7,7 @@ class Powerup extends Entity {
     5, 0, 4, 3, 5, 0, 0, 0, 0, 1, 2, 3, 4, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 5, 0, 0, 0, 0, 0, 1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
     4, 5, 4, 3, 5, 0, 0, 0, 0, 1, 2, 0, 4, 5, 0, 0, 0, 0, 0, 0, 1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 5, 0, 0, 0, 0, 0, 1, 2, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-
+  color[] colors = {color(255),color(0,200,0),color(0,200,200),color(255,165,0), color(200,0,0)};
 //int[] weighting = {0, 0, 0, 3, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 3, 0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 3, 0, 
 //    0, 0, 0, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 0, 0, 0, 0, 0, 3, 3, 
 //    0, 3, 0, 3, 0, 0, 0, 0, 3, 0, 0, 0, 3, 0, 0, 0, 0, 3, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 3, 0, 3, 3, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
@@ -37,9 +37,23 @@ class Powerup extends Entity {
     xpos = x;
     ypos = y;
     yvel = 0;
-    col = color(255);
+    
 
     state = weighting[(int)random(weighting.length)];
+    if (state != 0)
+      col = colors[state-1];
+    else col = color(255);
+  }
+  Powerup(int x, int y, int state){
+    super();
+    w = 14;
+    h = 14;
+    xpos = x;
+    ypos = y;
+    yvel = 0;
+    col = colors[state-1];
+    
+    this.state = state;
   }
 
 
@@ -50,6 +64,12 @@ class Powerup extends Entity {
       fill(col);
       ellipse(xpos, ypos, w, h);
       ypos += yvel;
+  }
+  void drawPowerUp(){
+    strokeWeight(3);
+    stroke(outline);
+    fill(col);
+    ellipse(xpos,ypos,w,h);
   }
   
   void checkCollisions(GameBoard b, Paddle p)

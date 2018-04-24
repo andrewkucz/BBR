@@ -7,6 +7,7 @@ class HUD {
   String name;
   int score = 0;
   int numlives;
+  Powerup[] powerups;
   
   HUD(int x, int y, String s, int l)
   {
@@ -16,9 +17,13 @@ class HUD {
     w = (width-588)/2;
     name = s;
     numlives = l;
+    powerups = new Powerup[5];
+    for (int i = 0; i < powerups.length; i++){
+     powerups[i] = new Powerup(xpos + 40,340 + i * 50,i+1); 
+    }
   }
 
-  void update(int s, int l, int ps)
+  void update(int s, int l, int ps, int ps1)
   {
     fill(0);
     noStroke();
@@ -35,7 +40,9 @@ class HUD {
     
     
     String power = "";
-    
+    for (int i = 0; i < game.paddles.length; i ++){
+      if(game.gamemode == 1 && i ==1) break;
+      if(i == 1) ps = ps1;  //hacky but it'll work
     if(ps == 1)
     {
       power = "LONG";
@@ -53,7 +60,17 @@ class HUD {
       power = "None";
     }
     
-    text("PADDLE: " + power, xpos+30, 250);
+    text("PADDLE" + ((game.gamemode == 1) ? "" : " " + (i + 1)) + ": " + power, xpos+30, 250 + i*50);
+    }
+    for (int i = 0; i < powerups.length; i ++ ){
+      powerups[i].drawPowerUp();
+    }
+    fill(255);
+    text(": LONG", xpos+80, 350);
+    text(": FAST", xpos+80, 400);
+    text(": SHOOT", xpos+80, 450);
+    text(": MULTI", xpos+80, 500);
+    text(": FIRE", xpos+80, 550);
   }
   
   

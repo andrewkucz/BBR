@@ -38,7 +38,7 @@ class Brick extends Entity {
   void update()
   {
 
-    if(state>0)
+    if (state>0)
     {
       fill(col);
       noStroke();
@@ -50,22 +50,24 @@ class Brick extends Entity {
 
   void hit()
   {
-    if(game.score>99999)
+    if (game.score>99999)
     {
       game.score = 99999;
-    }
-    else
+    } else
     {
       game.score += 10;
     }
-    
-    if (state>0){
-    if(state==1)
-    {
-      power.setYVel(3);
-    } 
+
+    if (state>0) {
+      if (state==1)
+      {
+        power.setYVel(3);
+      } 
       state--;
       col = color(0, 0, map(state, 3, 1, 30, 255));
+    }
+    if (state == 0){      ///check whether or not the game board is empty after a brick hit to prevent extra checks
+      game.isBoardEmpty();
     }
   }
   int getState() {

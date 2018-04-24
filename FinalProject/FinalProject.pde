@@ -7,7 +7,7 @@ void setup()
 
   frameRate(60);
   game = new Game();
-  
+
 }
 
 void draw()
@@ -47,8 +47,13 @@ void keyPressed()
       game.paddle.leftpressed = true;
     }    
   }
-
-
+ 
+  if (key == 'a'){
+    game.paddle2.leftpressed = true;
+  }
+  else if (key == 'd'){
+    game.paddle2.rightpressed = true;
+  }
   
   
 }
@@ -69,6 +74,13 @@ void keyReleased()
       game.paddle.leftpressed = false;
     }
   }
+  if (key == 'a'){
+    game.paddle2.leftpressed = false;
+  }
+  else if (key == 'd'){
+    game.paddle2.rightpressed = false;
+  }
+  
   
 }
 
