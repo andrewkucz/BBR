@@ -2,7 +2,7 @@ abstract class Screen
 {
 
   int w = 588;
-  int h = height-20;
+  int h = height;
   int ypos = (height-h)/2;
   int xpos = (width-w)/2;
 

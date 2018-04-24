@@ -67,6 +67,16 @@ abstract class Entity {
   {
     return xvel;
   }
+  
+  void setState(int s)
+  {
+    state = s;
+  }
+
+  int getState()
+  {
+    return state;
+  }
 
   // each draw method is unique
   abstract void update();

@@ -24,7 +24,7 @@ class Brick extends Entity {
 
     if (l == 1)
     {
-      col = color(0, 0, map(s, 1, 3, 30, 255));
+      col = color(0, 0, map(state, 3, 1, 30, 255));
     } else
     {
       col = color(255, 0, 0);
@@ -35,26 +35,28 @@ class Brick extends Entity {
 
   void update()
   {
-    rect(xpos, ypos, w, h);
-    power.update();
+    if(state>0)
+    {
+      fill(col);
+      noStroke();
+      rect(xpos, ypos, w, h);
+    }  
+    //power.update();
   }
 
 
   void hit()
   {
-    if (state>0)
+    if(state==1)
+    {
+      power.setYVel(3);
       state--;
-  }
-
-
-  void setState(int s)
-  {
-    state = s;
-  }
-
-  int getState()
-  {
-    return state;
+    }  
+    else if (state>1)
+    {
+      state--;
+    }
+    
   }
 
 }

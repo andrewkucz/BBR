@@ -7,13 +7,14 @@ class NameEntry extends Screen { //<>//
   boolean blink = true;
   int counter = 0;
   int threshold = 24;
+  String directions;
   
   PFont font;
   int textsize;
   
   MenuButton ok, back;
 
-  NameEntry()
+  NameEntry(String s)
   {
     font = loadFont("ArcadeNormal-48.vlw");
     col = color(255);
@@ -22,12 +23,26 @@ class NameEntry extends Screen { //<>//
     name[0] = ' ';
     name[1] = ' ';
     name[2] = ' ';
-    
+    directions = s;
     ok = new MenuButton("OK");
     back = new MenuButton("BACK");
     ok.setY(13*h/20);
     back.setY(8*h/10);
   }
+  
+  void setDirections(String s)
+  {
+    directions = s;
+  }
+  
+  void cleararr()
+  {
+    name[0] = ' ';
+    name[1] = ' ';
+    name[2] = ' ';
+    cursor = -1;
+  }
+  
 
   void update()
   {
@@ -49,7 +64,7 @@ class NameEntry extends Screen { //<>//
     textFont(font);
     textSize(textsize);
     fill(0);
-    text("ENTER INITIALS", xpos+(w/2), ypos+(h/3));
+    text(directions, xpos+(w/2), ypos+(h/3));
 
     for (int i=0; i<3; i++)
     {
