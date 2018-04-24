@@ -7,6 +7,7 @@ class Game {
   Screen about;
   NameEntry nameentry;
   GameBoard board;
+  HUD gameinfo;
 
   boolean initialized = false;
   int gamemode;
@@ -92,8 +93,6 @@ class Game {
 
     updateGameState();
 
-    // move collision check (?)
-    checkCollisions();
   }
 
   // Initializes all game components (regardless of gamemode)
@@ -105,10 +104,10 @@ class Game {
     board = new GameBoard(1);
 
     // Initialize user controlled paddle object
-    paddle = new Paddle(board.w/5, 15, 0, color(255, 0, 0));
+    paddle = new Paddle(118, 15, 0, color(255, 0, 0));
     paddle.setLocation(board.xpos + ((board.w-paddle.w)/2), board.h - (paddle.h*2));
 
-    paddle2 = new Paddle(board.w/5, 15, 0, color(0, 0, 255));
+    paddle2 = new Paddle(118, 15, 0, color(0, 0, 255));
 
     // Initialize ball object
     balls.clear();
@@ -126,7 +125,10 @@ class Game {
     }
 
     // Init leaderboard
-    highscores = new Leaderboard(board.xpos + board.w, board.ypos);
+    highscores = new Leaderboard(board.xpos + board.w, board.ypos+30);
+    
+    // Init game info display
+    gameinfo = new HUD(0,0, playername, numLives);
   }
 
 
@@ -134,8 +136,15 @@ class Game {
 
   // Game collision  detection
   void checkCollisions()
-  {
-    // insert a lot of code and math here
+  { 
+    
+    for(Powerup p : board.powerups)
+    {
+      p.checkCollisions(board, paddle);
+    }
+    
+    paddle.blaster.checkCollisions(board);
+    
   }
 
 
@@ -149,6 +158,7 @@ class Game {
     pausemenu = new PauseMenu();
     pausemenu.addButton("Resume");
     pausemenu.addButton("Quit");
+    
 
     nameentry = new NameEntry("ENTER INITIALS");
 
@@ -168,10 +178,14 @@ class Game {
   void gameLoop()
   {
     board.update();
+    
+    paddle.inBounds = paddle.inBoundaries(board);
+    
     paddle.update();
     if (gamemode==2)
       paddle2.update();
-
+    
+    gameinfo.update(score, numLives, paddle.getState());
     highscores.update();
 
     for (Ball b : balls) {
@@ -186,6 +200,9 @@ class Game {
       if(b.state == 2)
       b.checkCollisions(board, paddle);
     }
+    
+    checkCollisions();
+    
   }
 
 
@@ -237,13 +254,12 @@ class Game {
       pausemenu.active = false;
       background(0);
     }
-    // Single player name entry menu "OK" is clicked
+    // Name entry menu "OK" is clicked
     else if (gamestate == 5 && nameentry.ok.isHovered() && clicked && nameentry.name[2] != ' ')
     {
-      gamestate = 1;
-      gamemode = 1;
-      initGameComponents();
       playername = new String(nameentry.name);
+      gamestate = 1;
+      initGameComponents();
     }
     // Single player name entry menu "BACK" is clicked 
     else if (gamestate == 5 && nameentry.back.isHovered() && clicked)
@@ -260,6 +276,7 @@ class Game {
       nameentry.setDirections("ENTER INITIALS");
       nameentry.cleararr();
       gamestate = 5;
+      gamemode = 1;
     }
     // Gamemode menu "2 Player" is clicked
     else if (gamestate == 6 && gamemodemenu.buttons.get(1).isHovered() && clicked)
@@ -278,7 +295,6 @@ class Game {
       nameentry.setDirections("ENTER TEAM TAG");
       nameentry.cleararr();
       gamemode = 2;
-      initGameComponents();
     }
     // 2 player menu "battle" is clicked
     else if (gamestate == 7 && twoplayermenu.buttons.get(1).isHovered() && clicked)
