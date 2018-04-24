@@ -8,6 +8,9 @@ class Game {
   NameEntry nameentry;
   GameBoard board;
   HUD gameinfo;
+  
+  //SoundFile bgmusic;
+  
 
   boolean initialized = false;
   int gamemode;
@@ -20,7 +23,8 @@ class Game {
   Paddle paddle;
 
   ArrayList<Ball> balls = new ArrayList<Ball>();
-  int score, numLives;
+  int score;
+  int numLives;
   String playername;
 
   Paddle paddle2;
@@ -38,7 +42,9 @@ class Game {
     score = 0;
     numLives = 3;
     gamemode = 1;
-
+    
+    Entity e = new Entity(this);
+    
     // Initialize menus
     initMenus();
   }

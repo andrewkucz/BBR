@@ -8,6 +8,7 @@ class Gun extends Entity {
 
   Gun()
   {
+    super();
     bullets = new ArrayList<Bullet>();
     w = 20;
     h = 20;

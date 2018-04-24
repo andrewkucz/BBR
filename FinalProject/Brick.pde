@@ -11,11 +11,13 @@ class Brick extends Entity {
 
   Brick()
   {
+    super();
     state=0;
   }
 
   Brick(int x, int y, int s, int l, Powerup p)
   {
+    super();
     xpos = x;
     ypos = y;
     state = s;
@@ -48,14 +50,22 @@ class Brick extends Entity {
 
   void hit()
   {
-  
+    if(game.score>99999)
+    {
+      game.score = 99999;
+    }
+    else
+    {
+      game.score += 10;
+    }
+    
     if (state>0){
     if(state==1)
     {
       power.setYVel(3);
     } 
       state--;
-      col = color(0, 0, map(state, 1, 3, 30, 255));
+      col = color(0, 0, map(state, 3, 1, 30, 255));
     }
   }
   int getState() {

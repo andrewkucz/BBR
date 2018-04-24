@@ -1,11 +1,22 @@
-abstract class Entity {
+static class Entity {
 
   float xpos, ypos;
   int w, h;
   int state;
   float xvel, yvel;
   color col;
-
+  static Game game;
+  
+  Entity(Game g)
+  {
+    game = g;
+  }
+  
+  Entity()
+  {
+    
+  }
+  
   void setLocation(float x, float y)
   {
     xpos = x;
@@ -77,7 +88,4 @@ abstract class Entity {
   {
     return state;
   }
-
-  // each draw method is unique
-  abstract void update();
 }
