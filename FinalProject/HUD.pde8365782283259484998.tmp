@@ -1,0 +1,53 @@
+class HUD {
+ 
+  int xpos, ypos;
+  int h, w;
+  int textsize = 20;
+  PFont font = loadFont("ArcadeNormal-48.vlw");
+  String name;
+  int score = 0;
+  int numlives;
+  
+  HUD(int x, int y, String s, int l)
+  {
+    xpos = x;
+    ypos = y;
+    h = height;
+    w = (width-588)/2;
+    name = s;
+    numlives = l;
+  }
+
+  void update(int s, int l)
+  {
+    fill(0);
+    noStroke();
+    rect(xpos,ypos,w, h);
+    fill(255);
+    textFont(font);
+    textSize(textsize);
+    textAlign(LEFT);
+    text("PLAYER: " + name, xpos+40, 100);
+    score = s;
+    text("SCORE: " + scoreToString(), xpos+40, 150);
+    numlives = l;
+    text("LIVES:   " + l, xpos+40, 200);
+  }
+  
+  String scoreToString()
+  {
+    String s = "";
+    
+    for (int i=0; i<5-Integer.toString(score).length(); i++)
+    {
+      s+="0";
+    }
+    s += score;
+    
+    return s;
+    
+  }
+  
+  
+  
+}

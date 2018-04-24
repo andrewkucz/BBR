@@ -2,6 +2,10 @@ class GameBoard extends Screen {
 
   // brick array
   Brick[][] board;
+  
+  // powerup list
+  ArrayList<Powerup> powerups = new ArrayList<Powerup>();
+  
 
   // rows and cols of bricks
   int rows = 6;
@@ -14,6 +18,13 @@ class GameBoard extends Screen {
   int level;
  //boolean hasDrawn = false;
 
+
+  GameBoard() {
+    board = new Brick[rows][cols];
+    level = 1;
+    col = color(255);
+    initBoard(1);
+  }
 
   GameBoard(int l) {
     board = new Brick[rows][cols];
@@ -35,7 +46,12 @@ class GameBoard extends Screen {
       {
         for (int j = 0; j<cols; j++)
         {
-          board[i][j] = new Brick(xpos+(gap*(j+1))+(brickw*j), ypos+(gap*(i+1))+(brickh*i), (i/2)+1, l, new Powerup(xpos+(gap*(j+1))+(brickw*j)+(brickw/2), ypos+(gap*(i+1))+(brickh*i)+(brickh/2)));
+          Powerup p = new Powerup(xpos+(gap*(j+1))+(brickw*j)+(brickw/2), ypos+(gap*(i+1))+(brickh*i)+(brickh/2));
+          if(p.getState() > 0)
+           {
+             powerups.add(p);
+           }
+          board[i][j] = new Brick(xpos+(gap*(j+1))+(brickw*j), ypos+(gap*(i+1))+(brickh*i), (i/2)+1, l, p);
           board[i][j].w = brickw;
           board[i][j].h = brickh;
         }
@@ -46,7 +62,8 @@ class GameBoard extends Screen {
   }
 
   void update() {
-
+    
+    background(0);
     noStroke();
     fill(col);
     //if(!hasDrawn){
@@ -58,16 +75,24 @@ class GameBoard extends Screen {
     {
       for (int j = 0; j<cols; j++)
       {
-        if (board[i][j].state > 0)
-        {
-          fill(board[i][j].col);
-          noStroke();
           board[i][j].update();
-        }
       }
     }
     
+
+    for(int i=0; i<powerups.size(); i++)
+    {
+      if(powerups.get(i).getState() == 0)
+      {
+        powerups.remove(i);
+      }
+      else
+      {
+      powerups.get(i).update();
+      }
+    }
   }
+
 
   boolean isEmpty()
   {
@@ -90,7 +115,7 @@ class GameBoard extends Screen {
     {
       for (int j = 0; j<cols; j++)
       {
-        if (board[i][j].xpos < x && board[i][j].xpos+w > x && board[i][j].ypos < y && board[i][j].ypos+h > y)
+        if (board[i][j].xpos < x && board[i][j].xpos+board[i][j].w > x && board[i][j].ypos < y && board[i][j].ypos+board[i][j].h > y)
         {
           return board[i][j];
         }
