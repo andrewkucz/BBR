@@ -11,7 +11,7 @@ class Leaderboard extends Entity {
   Leaderboard(int x, int y)
   {
     w = (width-588)/2;
-    h = (height-20)/3;
+    h = (height)/3;
     xpos = x;
     ypos = y;
     parseFile();
@@ -83,11 +83,13 @@ class Leaderboard extends Entity {
   void update()
   {
     fill(0);
+    noStroke();
+    rect(w+588, 0, w, height);
     rect(xpos, ypos, w, h);
     fill(255);
     textFont(font);
     textSize(textsize);
-
+    textAlign(CENTER);
     text("Highscores", xpos+(w/2), ypos + h*0.1);
 
     for (int i=0; i<board.size(); i++)
