@@ -261,12 +261,16 @@ class Ball extends Entity {
         if (((tempx- closestPointx) * (tempx - closestPointx) + (tempy - closestPointy) * (tempy - closestPointy)) < (w/2 * w/2) && temp.getState() != 0) {  //Collision!
 
           speed += speedinc;
+          int returnVal = 0;
           if (state == 5) {
             temp.setState(1); 
-            temp.hit();
+            returnVal = temp.hit();
+            if (returnVal == -1)
+              return -1;  //pass up return value from Hit
           } else {
-            temp.hit();
-
+            returnVal = temp.hit();
+              if (returnVal == -1)
+              return -1;  //pass up return value from Hit
             if (closestPointx == temp.xpos) {  //left side
               x2temp = (closestPointx - w/2);
               y2temp = slope * (x2temp - xpos) + ypos;

@@ -50,7 +50,7 @@ class Brick extends Entity {
   }
 
 
-  void hit()
+  int hit()
   {
     if (game.score>99999)
     {
@@ -72,10 +72,12 @@ class Brick extends Entity {
       
       if(game.board.isEmpty())
       {
-        game.nextLevel();
+        return -1;
       }
+      
     
     }
+    return 0;
   }
   int getState() {
     return state;

@@ -213,6 +213,7 @@ class Game {
     highscores.update();
     
     if (!balls.isEmpty()){
+      int returnVal = 0;
     for (Ball b : balls) {
       if (b.getState() == 1)
       {
@@ -223,7 +224,8 @@ class Game {
 
       //ball collison checking with bounds and bricks
       if(b.state == 2 || b.state == 5){
-        b.checkCollisions(board, paddles);
+        returnVal = b.checkCollisions(board, paddles);
+        if (returnVal == -1) break;
       }
     }
 
@@ -232,6 +234,9 @@ class Game {
         balls.remove(i);
         i--;
       }
+    }
+    if (returnVal == -1){
+      nextLevel();
     }
     }
     else{
