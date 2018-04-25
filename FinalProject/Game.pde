@@ -1,3 +1,4 @@
+import java.util.*;
 class Game {
 
   Title titlescreen;
@@ -8,6 +9,7 @@ class Game {
   NameEntry nameentry;
   GameBoard board;
   HUD gameinfo;
+  Menu gameovermenu;
   
   //SoundFile bgmusic;
   
@@ -28,6 +30,7 @@ class Game {
   String playername;
 
   Paddle paddle2;
+  Paddle[] paddles;
   String playername2;
 
 
@@ -38,7 +41,7 @@ class Game {
 
 
   Game() {
-    gamestate = 1;
+    gamestate = 0;
     score = 0;
     numLives = 3;
     gamemode = 1;
@@ -91,7 +94,8 @@ class Game {
     case 9:
       nameentry.update();
       break;
-    case 10: 
+    case 10:
+      gameovermenu.update();
       break;
       
     }
@@ -114,7 +118,9 @@ class Game {
     paddle.setLocation(board.xpos + ((board.w-paddle.w)/2), board.h - (paddle.h*2));
 
     paddle2 = new Paddle(118, 15, 0, color(0, 0, 255));
-
+    paddles = new Paddle[2];
+    paddles[0] = paddle;
+    paddles[1] = paddle2;
     // Initialize ball object
     balls.clear();
     balls.add(new Ball(1));
@@ -147,6 +153,9 @@ class Game {
     for(Powerup p : board.powerups)
     {
       p.checkCollisions(board, paddle);
+      if(gamemode == 2){
+        p.checkCollisions(board,paddle2);
+      }
     }
     
     paddle.blaster.checkCollisions(board);
@@ -177,6 +186,12 @@ class Game {
     twoplayermenu.addButton("CO-OP");
     twoplayermenu.addButton("Battle");
     twoplayermenu.addButton("BACK");
+    
+    gameovermenu = new Menu("GAME OVER");
+    gameovermenu.addButton("RESTART");
+    gameovermenu.addButton("QUIT");
+    gameovermenu.setBGColor(color(255,255,255,0));
+    
   }
 
 
@@ -188,25 +203,39 @@ class Game {
     paddle.inBounds = paddle.inBoundaries(board);
     
     paddle.update();
-    if (gamemode==2)
+    if (gamemode==2){
+      paddle2.inBounds = paddle2.inBoundaries(board);
       paddle2.update();
+    }
     
-    gameinfo.update(score, numLives, paddle.getState());
+    gameinfo.update(score, numLives, paddle.getState(), paddle2.getState());
     highscores.update();
-
+    
+    if (!balls.isEmpty()){
     for (Ball b : balls) {
       if (b.getState() == 1)
       {
-        b.setLocation(paddle.xpos+paddle.w/2, paddle.ypos-balls.get(0).h/2);
+        //b.setLocation(paddle.xpos+paddle.w/2, paddle.ypos-balls.get(0).h/2);
       }
-      
+      if (b.getState() != 3) //draw for all states except 3
       b.update();
 
       //ball collison checking with bounds and bricks
-      if(b.state == 2)
-      b.checkCollisions(board, paddle);
+      if(b.state == 2){
+        b.checkCollisions(board, paddles);
+      }
     }
-    
+
+    for (int i = 0; i < balls.size(); i ++){
+      if (balls.get(i).getState() == 3){
+        balls.remove(i);
+        i--;
+      }
+    }
+    }
+    else{
+     loseLife(); 
+    }
     checkCollisions();
     
   }
@@ -347,5 +376,35 @@ class Game {
 
 
     clicked = false;
+  }
+  void loseLife(){
+    numLives --;
+    if (numLives > 0){
+      
+      balls.add(new Ball(1));
+      if (gamemode == 1){
+        balls.get(0).setLocation(paddle.xpos+paddle.w/2, paddle.ypos-balls.get(0).h/2);
+      }
+      else if(gamemode == 2){  //set ball to random paddle location if in co-op mode
+        int pad = (int)random(2);
+        if (pad == 0){
+          balls.get(0).setLocation(paddle.xpos + paddle.w/2, paddle.ypos - balls.get(0).h/2);
+        }
+        else{
+          balls.get(0).setLocation(paddle2.xpos + paddle.w/2, paddle2.ypos - balls.get(0).h/2);
+        }
+      }
+      println("Life Lost");
+    }
+    else {
+      //TODO: Handle Game over and win state
+      //numLives ++;  //remove later when game state actually changes 
+     gamestate = 10;
+     highscores.insertScore(playername, score);
+    }
+  }
+  void isBoardEmpty(){
+    //TODO: Handle Win Level Event
+    println("Win Level");
   }
 }

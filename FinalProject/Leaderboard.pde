@@ -47,30 +47,36 @@ class Leaderboard extends Entity {
       e.printStackTrace();
     }
   }
-
+  
   void writeFile()
   {
-    writer = createWriter(filename);
+    writer = createWriter("./data/" + filename);
 
     for (Scoreline s : board)
     {
       writer.println(s.getName() + " | " + s.getScore());
+      println(s.getName() + " | " + s.getScore());
     }
 
     writer.flush();
     writer.close();
+    println("done");
   }
 
   void insertScore(String n, int s)
   {
+    boolean added = false;
     for (int i=0; i<board.size(); i++)
     {
       if (s > board.get(i).getScore())
       {
         board.add(i, new Scoreline(n, s));
+        added = true;
         break;
       }
     }
+    if (!added)
+      board.add(new Scoreline(n, s));
 
     // Trim back down to 5
     while (board.size()>5)
@@ -78,6 +84,7 @@ class Leaderboard extends Entity {
       board.remove(board.size()-1);
     }
     writeFile();
+    update();
   }
 
 
@@ -95,6 +102,13 @@ class Leaderboard extends Entity {
 
     for (int i=0; i<board.size(); i++)
     {
+      if (game.playername.equals(board.get(i).getName()) && game.score == board.get(i).getScore())
+      {
+        fill(255, 0, 0);
+      } else
+      {
+        fill(255);
+      }
       text(board.get(i).toString(), xpos+(w/2), ypos+(30*i)+(h*0.25));
     }
   }
