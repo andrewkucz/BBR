@@ -9,6 +9,7 @@ class Ball extends Entity {
   // 1 - visible, waiting to start (unmoving, attached to paddle)
   // 2 - in action - bouncing around, checking for collisions
   // 3 - dead (?)
+  // 5 - fireball
 
   //speed should be capped at paddle height + ball width to avoid any scenario where ball will
   //pass through a brick or paddle.
@@ -44,8 +45,9 @@ class Ball extends Entity {
     velocity = new PVector(0, 0);
     speed = 5;
   }  
-
-
+  void setSpeed(float s){
+    speed = s;
+  }
 
   void update()
   { 
@@ -168,6 +170,11 @@ class Ball extends Entity {
       collisionVector = new PVector(xpos - closestPointx, ypos - closestPointy);
 
       if (((tempx- closestPointx) * (tempx - closestPointx) + (tempy - closestPointy) * (tempy - closestPointy)) < (w/2 * w/2)) {  //Collision!
+        if (state == 5) {
+          state = 2;
+          setColor(color(0));
+        }
+
         //move to collision point
 
         if (closestPointx == paddle.xpos) {  //left side
@@ -252,71 +259,79 @@ class Ball extends Entity {
         collisionVector = new PVector(xpos - closestPointx, ypos - closestPointy);
 
         if (((tempx- closestPointx) * (tempx - closestPointx) + (tempy - closestPointy) * (tempy - closestPointy)) < (w/2 * w/2) && temp.getState() != 0) {  //Collision!
+
           speed += speedinc;
-          println(speed);
+          int returnVal = 0;
+          if (state == 5) {
+            temp.setState(1); 
+            returnVal = temp.hit();
+            if (returnVal == -1)
+              return -1;  //pass up return value from Hit
+          } else {
+            returnVal = temp.hit();
+              if (returnVal == -1)
+              return -1;  //pass up return value from Hit
+            if (closestPointx == temp.xpos) {  //left side
+              x2temp = (closestPointx - w/2);
+              y2temp = slope * (x2temp - xpos) + ypos;
 
-          temp.hit();
+              collisionVector = new PVector(x2temp - xpos, y2temp-ypos);
 
-          if (closestPointx == temp.xpos) {  //left side
-            x2temp = (closestPointx - w/2);
-            y2temp = slope * (x2temp - xpos) + ypos;
-
-            collisionVector = new PVector(x2temp - xpos, y2temp-ypos);
-
-            newMultTemp = (newVel.mag() - collisionVector.mag());
-            if (newMultTemp > newMult) {
-              //handle setting neccessary collision handlers here
-              newMult = newMultTemp;
-              x2 = x2temp;
-              y2 = y2temp;
-              changed = 1;
+              newMultTemp = (newVel.mag() - collisionVector.mag());
+              if (newMultTemp > newMult) {
+                //handle setting neccessary collision handlers here
+                newMult = newMultTemp;
+                x2 = x2temp;
+                y2 = y2temp;
+                changed = 1;
+              }
             }
-          }
-          if (closestPointx == temp.xpos + temp.w) {  //right side
-            x2temp = (closestPointx + w/2);
-            y2temp = slope * (x2temp - xpos) + ypos;
+            if (closestPointx == temp.xpos + temp.w) {  //right side
+              x2temp = (closestPointx + w/2);
+              y2temp = slope * (x2temp - xpos) + ypos;
 
 
-            collisionVector = new PVector(x2temp - xpos, y2temp-ypos);
+              collisionVector = new PVector(x2temp - xpos, y2temp-ypos);
 
-            newMultTemp = (newVel.mag() - collisionVector.mag());
-            if (newMultTemp > newMult) {
-              //handle setting neccessary collision handlers here
-              newMult = newMultTemp;
-              x2 = x2temp;
-              y2 = y2temp;
-              changed = 1;
+              newMultTemp = (newVel.mag() - collisionVector.mag());
+              if (newMultTemp > newMult) {
+                //handle setting neccessary collision handlers here
+                newMult = newMultTemp;
+                x2 = x2temp;
+                y2 = y2temp;
+                changed = 1;
+              }
             }
-          }
-          if (closestPointy == temp.ypos) {  //top
+            if (closestPointy == temp.ypos) {  //top
 
-            y2temp = closestPointy - w/2;
-            x2temp = (y2temp -ypos) /slope + xpos;
+              y2temp = closestPointy - w/2;
+              x2temp = (y2temp -ypos) /slope + xpos;
 
-            collisionVector = new PVector(x2temp - xpos, y2temp-ypos);
+              collisionVector = new PVector(x2temp - xpos, y2temp-ypos);
 
-            newMultTemp = (newVel.mag() - collisionVector.mag());
-            if (newMultTemp > newMult) {
-              //handle setting neccessary collision handlers here
-              newMult = newMultTemp;
-              x2 = x2temp;
-              y2 = y2temp;
-              changed = 2;
+              newMultTemp = (newVel.mag() - collisionVector.mag());
+              if (newMultTemp > newMult) {
+                //handle setting neccessary collision handlers here
+                newMult = newMultTemp;
+                x2 = x2temp;
+                y2 = y2temp;
+                changed = 2;
+              }
             }
-          }
-          if (closestPointy == temp.ypos + temp.h) {  //bottom
-            y2temp = closestPointy + w/2;
-            x2temp = (y2temp - ypos) /slope + xpos;
+            if (closestPointy == temp.ypos + temp.h) {  //bottom
+              y2temp = closestPointy + w/2;
+              x2temp = (y2temp - ypos) /slope + xpos;
 
-            collisionVector = new PVector(x2temp - xpos, y2temp-ypos);
+              collisionVector = new PVector(x2temp - xpos, y2temp-ypos);
 
-            newMultTemp = (newVel.mag() - collisionVector.mag());
-            if (newMultTemp > newMult) {
-              //handle setting neccessary collision handlers here
-              newMult = newMultTemp;
-              x2 = x2temp;
-              y2 = y2temp;
-              changed = 2;
+              newMultTemp = (newVel.mag() - collisionVector.mag());
+              if (newMultTemp > newMult) {
+                //handle setting neccessary collision handlers here
+                newMult = newMultTemp;
+                x2 = x2temp;
+                y2 = y2temp;
+                changed = 2;
+              }
             }
           }
         }

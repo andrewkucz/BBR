@@ -24,15 +24,17 @@ class Brick extends Entity {
     level = l;
     power = p;
 
-    if (l == 1)
+    if (l==1)
     {
       col = color(0, 0, map(state, 3, 1, 30, 255));
-    } else
+    } else if(l==2)
     {
-      col = color(255, 0, 0);
+      col = color(map(state, 4, 1, 50, 255), 0, 0);
+    } else if(l==3)
+    {
+      col = color(0, map(state, 5, 1, 25, 255), 0);
     }
 
-    // other level color schemes here
   }
 
   void update()
@@ -48,7 +50,7 @@ class Brick extends Entity {
   }
 
 
-  void hit()
+  int hit()
   {
     if (game.score>99999)
     {
@@ -64,13 +66,36 @@ class Brick extends Entity {
         power.setYVel(3);
       } 
       state--;
-      col = color(0, 0, map(state, 3, 1, 30, 255));
+      updateColor(level);
     }
     if (state == 0){      ///check whether or not the game board is empty after a brick hit to prevent extra checks
-      game.isBoardEmpty();
+      
+      if(game.board.isEmpty())
+      {
+        return -1;
+      }
+      
+    
     }
+    return 0;
   }
   int getState() {
     return state;
   }
+  
+  
+  void updateColor(int l)
+  {
+    if (l==1)
+    {
+      col = color(0, 0, map(state, 3, 1, 30, 255));
+    } else if(l==2)
+    {
+      col = color(map(state, 3, 1, 30, 255), 0, 0);
+    } else if(l==3)
+    {
+      col = color(0, map(state, 3, 1, 30, 255), 0);
+    }
+  }
+  
 }
