@@ -29,7 +29,6 @@ class Paddle extends Entity {
 
   void update() {
     
-    //println(state);
     
     if(counter<=duration)
     {

@@ -16,7 +16,7 @@ class Bullet extends Entity {
   }
   
   
-  void update()
+  void update()  //draw and move bullet
   {
     if(state > 0)
     {

@@ -1,3 +1,4 @@
+import processing.sound.*;
 Game game;
 
 void setup()
@@ -6,16 +7,16 @@ void setup()
   background(0);
 
   frameRate(60);
-  game = new Game();
+  game = new Game(this);
 }
 
-void draw()
+void draw()  //main draw function
 {
   game.update();
 }
 
 
-void keyPressed()
+void keyPressed()//next functions handle user input
 {
 
   if (game.nameentry.isValid(key) && (game.getGameState() == 5 || game.getGameState() == 8 || game.getGameState() == 9))

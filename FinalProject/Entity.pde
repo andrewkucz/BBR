@@ -7,7 +7,7 @@ static class Entity {
   color col;
   static Game game;
   
-  Entity(Game g)
+  Entity(Game g)//gives every subclass a reference to the game object
   {
     game = g;
   }

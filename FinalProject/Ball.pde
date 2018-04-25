@@ -13,7 +13,7 @@ class Ball extends Entity {
 
   //speed should be capped at paddle height + ball width to avoid any scenario where ball will
   //pass through a brick or paddle.
-
+  float maxChange;  //maximumChange for x velocity when hitting a paddle 
   PVector velocity;
   float speed;
   float speedinc = 0.02;
@@ -44,12 +44,15 @@ class Ball extends Entity {
     yvel = 0;
     velocity = new PVector(0, 0);
     speed = 5;
+    maxChange = speed-2;
   }  
-  void setSpeed(float s){
+  void setSpeed(float s) {
     speed = s;
   }
-
-  void update()
+  void rotatePointerDown() {//used in h2h mode for paddle 2
+    arrow.rotateDown();
+  }
+  void update()  //update ball position
   { 
     if (state==1)
     {
@@ -74,16 +77,11 @@ class Ball extends Entity {
 
     noStroke();
     ellipse(xpos, ypos, w, h);
-
-
-
-    //xpos += xvel;
-    //ypos += yvel;
   }
-  int checkCollisions(GameBoard board, Paddle[] paddles) {
+  int checkCollisions(GameBoard board, Paddle[] paddles) {//helper function
     return checkCollisions(board, paddles, speed);
   }
-  int checkCollisions(GameBoard board, Paddle[] paddles, float mult) {  //may have to optimize this in order to keep up with frames
+  int checkCollisions(GameBoard board, Paddle[] paddles, float mult) {  //checks for collisions with all obstacles (not other balls)
     PVector newVel = new PVector(xvel, yvel);
     newVel.normalize();
     newVel.mult(mult);  //if this is a recursive call, we only want to move the ball a portion of its normal velocity
@@ -99,6 +97,7 @@ class Ball extends Entity {
 
     float x2temp, y2temp;
     float newMultTemp;
+    float xChangeTemp = 0; //added to x velocity if hitting the paddle top
     //collison with board boundaries
     if (tempx > (board.w + board.xpos - w/2)) {//collision with Right side of board
       //move to point of collision
@@ -135,13 +134,15 @@ class Ball extends Entity {
         y2 = y2temp;
         changed = 1;
       }
-    } else if (tempy < board.ypos + w/2) {
-
+    } else if (tempy < board.ypos + w/2) {//top of board
+      if (game.gamemode == 3) {
+        state = 3;
+        game.player1score += 10;
+        game.die.play();
+        return 0;
+      }
       y2temp = board.ypos + w/2;
       x2temp = (y2temp-ypos)/slope + xpos;
-
-      fill(200, 0, 0);
-
 
       collisionVector = new PVector(x2temp - xpos, y2temp-ypos);
 
@@ -155,6 +156,9 @@ class Ball extends Entity {
       }
     } else if (ypos > board.ypos + board.h - w/2) {
       state = 3;
+      if (game.gamemode == 3)
+        game.player2score += 10;
+      game.die.play();
       return 0; //remove ball from array
     }
     Paddle paddle;
@@ -166,6 +170,9 @@ class Ball extends Entity {
       //point where collision would happen on rectangle
       closestPointx = max(paddle.xpos, min(tempx, (paddle.xpos + paddle.w)));
       closestPointy = max(paddle.ypos, min(tempy, (paddle.ypos + paddle.h)));
+
+
+
       //vector from point of collision to center of ball
       collisionVector = new PVector(xpos - closestPointx, ypos - closestPointy);
 
@@ -215,7 +222,9 @@ class Ball extends Entity {
 
           y2temp = closestPointy - w/2;
           x2temp = (y2temp -ypos) /slope + xpos;
+          //set xChangeTemp
 
+          //
           collisionVector = new PVector(x2temp - xpos, y2temp-ypos);
 
           newMultTemp = (newVel.mag() - collisionVector.mag());
@@ -225,6 +234,7 @@ class Ball extends Entity {
             x2 = x2temp;
             y2 = y2temp;
             changed = 2;
+            xChangeTemp = (closestPointx - (paddle.xpos + paddle.w/2))/paddle.w*2*maxChange;
           }
         }
         if (closestPointy == paddle.ypos + paddle.h) {  //bottom
@@ -240,6 +250,7 @@ class Ball extends Entity {
             x2 = x2temp;
             y2 = y2temp;
             changed = 2;
+            xChangeTemp = (closestPointx - (paddle.xpos + paddle.w/2))/paddle.w*2*maxChange;
           }
         }
 
@@ -269,7 +280,7 @@ class Ball extends Entity {
               return -1;  //pass up return value from Hit
           } else {
             returnVal = temp.hit();
-              if (returnVal == -1)
+            if (returnVal == -1)
               return -1;  //pass up return value from Hit
             if (closestPointx == temp.xpos) {  //left side
               x2temp = (closestPointx - w/2);
@@ -338,7 +349,6 @@ class Ball extends Entity {
       }
     }
 
-
     xpos = x2;
     ypos = y2;
     if (newMult != 0) {  //no collision woohoo
@@ -346,7 +356,14 @@ class Ball extends Entity {
         xvel *= -1;
       } else if (changed == 2) {
         yvel *= -1;
+        if (xChangeTemp != 0) {
+          xvel += xChangeTemp;  //change velocity vector x related to y
+          PVector v = new PVector(xvel, yvel);  //new velocity is now faster than old so
+          v.normalize();                       //normalize then
+          v.mult(speed);                       //rescale to original magnitude
+        }
       }
+      game.collision.play();
       checkCollisions(board, paddles, newMult);
     }
 

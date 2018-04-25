@@ -1,5 +1,5 @@
 class Leaderboard extends Entity {
-
+  
   ArrayList<Scoreline> board = new ArrayList<Scoreline>();
   BufferedReader reader;
   PrintWriter writer;
@@ -18,7 +18,7 @@ class Leaderboard extends Entity {
     parseFile();
   }
 
-  void parseFile()
+  void parseFile()//reads leaderboard file
   {
 
     reader = createReader(filename);
@@ -48,14 +48,14 @@ class Leaderboard extends Entity {
     }
   }
   
-  void writeFile()
+  void writeFile()//writes to leaderboard file
   {
     writer = createWriter("./data/" + filename);
 
     for (Scoreline s : board)
     {
       writer.println(s.getName() + " | " + s.getScore());
-      println(s.getName() + " | " + s.getScore());
+      
     }
 
     writer.flush();
@@ -63,7 +63,7 @@ class Leaderboard extends Entity {
     println("done");
   }
 
-  void insertScore(String n, int s)
+  void insertScore(String n, int s)//checks to see if new score is one of the high scores
   {
     boolean added = false;
     for (int i=0; i<board.size(); i++)
@@ -88,7 +88,7 @@ class Leaderboard extends Entity {
   }
 
 
-  void update()
+  void update()//redraws contents
   {
     fill(0);
     noStroke();
@@ -118,7 +118,7 @@ class Leaderboard extends Entity {
 
 
 
-class Scoreline {
+class Scoreline {//used to keep track of scores while in game
 
   int score;
   String name;
