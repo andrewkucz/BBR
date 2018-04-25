@@ -61,6 +61,7 @@ class Brick extends Entity {
     }
 
     if (state>0) {
+      game.collision.play();
       if (state==1)
       {
         power.setYVel(3);

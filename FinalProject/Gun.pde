@@ -61,6 +61,7 @@ class Gun extends Entity {
 
   void spawnBullet()
   {
+    game.shoot.play();
     bullets.add(new Bullet((int)xpos+(w/2), (int)ypos-h));
   }
 }

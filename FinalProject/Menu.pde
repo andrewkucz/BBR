@@ -3,7 +3,8 @@ class Menu extends Screen {
 
   ArrayList<MenuButton> buttons = new ArrayList<MenuButton>();
   String title = "";
-
+  PFont font = loadFont("ArcadeNormal-48.vlw");
+  int textsize = 24;
 
   Menu()
   {
@@ -29,11 +30,18 @@ class Menu extends Screen {
     fill(col);
     rect(xpos, ypos, w, h);
     
-    fill(0);
-    noStroke();
+    if(!title.equals(""))
+    {
     textAlign(CENTER);
-    text(title, xpos+(w/2), ypos+250);
-    
+    textFont(font);
+    textSize(textsize);
+    fill(255);
+    rectMode(CENTER);
+    rect(xpos+(w/2), ypos+215, textWidth(title) + 20, 40);
+    fill(0);
+    text(title, xpos+(w/2), ypos+225);
+    rectMode(CORNER);
+    }
 
     for (MenuButton mb : buttons) {
       mb.update();
