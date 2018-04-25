@@ -5,7 +5,9 @@ class HUD {
   int textsize = 20;
   PFont font = loadFont("ArcadeNormal-48.vlw");
   String name;
+  String name2;
   int score = 0;
+  //int score2 = 0;
   int numlives;
   Powerup[] powerups;
   
@@ -22,7 +24,27 @@ class HUD {
      powerups[i] = new Powerup(xpos + 40,340 + i * 50,i+1); 
     }
   }
-
+  HUD(String p1Name,String p2Name){
+    name = p1Name;
+    name2 = p2Name;
+  }
+  
+  void update(int p1score, int p2score, int rounds){
+    fill(0);
+    noStroke();
+    rect(xpos,ypos,w, h);
+    fill(255);
+    textFont(font);
+    textSize(textsize);
+    textAlign(LEFT);
+    text("PLAYER: " + name, xpos+30, 100);
+    score = p1score;
+    text("SCORE: " + scoreToString(), xpos+30, 150);
+    text("PLAYER: " + name2, xpos+30, 200);
+    score = p2score;
+    text("SCORE: " + scoreToString(), xpos+30, 250);
+    text("ROUNDS: " + rounds, xpos + 30, 300);
+  }
   void update(int s, int l, int ps, int ps1)
   {
     fill(0);

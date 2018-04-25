@@ -23,7 +23,11 @@ class Brick extends Entity {
     state = s;
     level = l;
     power = p;
-
+    
+    if (l==-1)
+    {
+      col = color(0, 0, map(state, 3, 1, 30, 255));
+    }
     if (l==1)
     {
       col = color(0, 0, map(state, 3, 1, 30, 255));
@@ -86,6 +90,10 @@ class Brick extends Entity {
   
   void updateColor(int l)
   {
+    if (l==-1)
+    {
+      col = color(0, 0, map(state, 3, 1, 30, 255));
+    } 
     if (l==1)
     {
       col = color(0, 0, map(state, 3, 1, 30, 255));
