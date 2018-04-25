@@ -25,12 +25,18 @@ class Game {
 
   ArrayList<Ball> balls = new ArrayList<Ball>();
   int score;
+  
+  //for h2h
+  int player1score;
+  int player2score;
   int numLives;
+  int rounds;
   String playername;
+  String playername2;
 
   Paddle paddle2;
   Paddle[] paddles;
-  String playername2;
+  
 
 
   int gamestate;
@@ -47,6 +53,7 @@ class Game {
     gamestate = 0;
     score = 0;
     numLives = 3;
+    rounds = 5;
     gamemode = 1;
     shoot = new SoundFile(p, "shoot.wav");
     collision = new SoundFile(p, "collision.wav");
@@ -102,6 +109,7 @@ class Game {
       break;
     case 10:
       gameovermenu.update();
+      if(gamemode != 3)
       gameinfo.update(score, numLives, paddle.getState(), paddle2.getState());
       break;
       
@@ -122,6 +130,8 @@ class Game {
     }
     
     // Initialize game board containing the brick array
+    if (gamemode == 3)
+      l = -1;  //special 1v1 level
     board = new GameBoard(l);
 
     // Initialize user controlled paddle object
@@ -146,12 +156,28 @@ class Game {
       balls.get(1).setLocation(paddle2.xpos+paddle.w/2, paddle2.ypos-balls.get(1).h/2);
       balls.get(0).setLocation(paddle.xpos+paddle.w/2, paddle.ypos-balls.get(0).h/2);
     }
+    if (gamemode == 3)
+    {
+      //set up paddles and balls
+      paddle.setLocation(board.xpos + ((board.w-paddle.w)/2), board.h - (paddle.h*2));
+      paddle2.setLocation(board.xpos + ((board.w-paddle.w)/2), paddle.h);
+      balls.add(new Ball(1));
+      balls.get(1).setLocation(paddle2.xpos+paddle.w/2, paddle2.ypos + paddle.h + balls.get(1).h/2);//set this to the bottom of the paddle
+      balls.get(1).rotatePointerDown();
+      balls.get(0).setLocation(paddle.xpos+paddle.w/2, paddle.ypos-balls.get(0).h/2);
+      //adjust grid location
+    }
 
     // Init leaderboard
     highscores = new Leaderboard(board.xpos + board.w, board.ypos+30);
     
     // Init game info display
+    if (gamemode ==1 || gamemode == 2){
     gameinfo = new HUD(0,0, playername, numLives);
+    }
+    if(gamemode == 3){
+    gameinfo = new HUD(playername,playername2);
+    }
   }
 
 
@@ -170,7 +196,9 @@ class Game {
     }
     
     paddle.blaster.checkCollisions(board);
-    
+    if (gamemode == 2){
+      paddle2.blaster.checkCollisions(board);
+    }
   }
 
 
@@ -218,15 +246,20 @@ class Game {
     paddle.inBounds = paddle.inBoundaries(board);
     
     paddle.update();
-    if (gamemode==2){
+    if (gamemode==2 || gamemode == 3){
       paddle2.inBounds = paddle2.inBoundaries(board);
       paddle2.update();
     }
-    
-    gameinfo.update(score, numLives, paddle.getState(), paddle2.getState());
+    if (gamemode == 1 || gamemode == 2){
+      gameinfo.update(score, numLives, paddle.getState(), paddle2.getState());
+    }
+    if(gamemode == 3){
+       gameinfo.update(player1score,player2score, rounds); 
+    }
     highscores.update();
     
     if (!balls.isEmpty()){
+      int returnVal = 0;
     for (Ball b : balls) {
       if (b.getState() == 1)
       {
@@ -237,7 +270,8 @@ class Game {
 
       //ball collison checking with bounds and bricks
       if(b.state == 2 || b.state == 5){
-        b.checkCollisions(board, paddles);
+        returnVal = b.checkCollisions(board, paddles);
+        if (returnVal == -1) break;
       }
     }
 
@@ -247,9 +281,17 @@ class Game {
         i--;
       }
     }
+    if (returnVal == -1){
+      nextLevel();
+    }
     }
     else{
-     loseLife(); 
+      if(gamemode == 1 || gamemode == 2){
+         loseLife(); 
+      }
+      else if(gamemode == 3){
+         nextRound(); 
+      }
     }
     checkCollisions();
     
@@ -355,11 +397,13 @@ class Game {
     // 2 player menu "battle" is clicked
     else if (gamestate == 7 && twoplayermenu.buttons.get(1).isHovered() && clicked)
     {
+
       game.menuclick.play();
-      //gamemode = 3;
-      //nameentry.setDirections("ENTER P1 TAG");
-      //nameentry.cleararr();
-      //gamestate = 8;
+      gamemode = 3;
+      nameentry.setDirections("ENTER P1 TAG");
+      nameentry.cleararr();
+      gamestate = 8;
+      
     }
     // 2 player menu "back" is clicked
     else if (gamestate == 7 && twoplayermenu.buttons.get(2).isHovered() && clicked)
@@ -373,6 +417,7 @@ class Game {
       game.menuclick.play();
       gamestate = 9;
       playername = new String(nameentry.name);
+      println(playername);
       nameentry.setDirections("ENTER P2 TAG");
       nameentry.cleararr();
     }
@@ -382,6 +427,7 @@ class Game {
       game.menuclick.play();
       gamestate = 1;
       playername2 = new String(nameentry.name);
+      initGameComponents(1);
     }
     // 2 player 2nd player name entry screen "BACK" is clicked
     else if (gamestate == 9 && nameentry.back.isHovered() && clicked)
@@ -422,15 +468,52 @@ class Game {
 
     clicked = false;
   }
+  void nextRound(){
+    rounds --;
+    
+    if (rounds > 0){
+      paddle.leftpressed = false;
+      paddle.rightpressed = false;
+      paddle2.leftpressed = false;
+      paddle2.rightpressed = false;
+      balls.add(new Ball(1));
+      balls.add(new Ball(1));
+      
+      balls.get(1).setLocation(paddle2.xpos+paddle.w/2, paddle2.ypos + paddle.h + balls.get(1).h/2);//set this to the bottom of the paddle
+      balls.get(1).rotatePointerDown();
+      balls.get(0).setLocation(paddle.xpos+paddle.w/2, paddle.ypos-balls.get(0).h/2);
+    }
+    else {
+      int winner = 0;
+      if(player1score > player2score){
+        winner = 1;
+        gameovermenu.setTitle("Player " + winner + " wins!");
+      }
+      else if(player2score > player1score){
+        winner = 2;
+        gameovermenu.setTitle("Player " + winner + " wins!");
+      }
+      else {
+        gameovermenu.setTitle("Draw!");
+      }
+      
+     gamestate = 10;
+    }
+  }
   void loseLife(){
     numLives --;
     if (numLives > 0){
       
       balls.add(new Ball(1));
+      paddle.leftpressed = false;
+        paddle.rightpressed = false;//stop paddle movement
       if (gamemode == 1){
         balls.get(0).setLocation(paddle.xpos+paddle.w/2, paddle.ypos-balls.get(0).h/2);
+        
       }
       else if(gamemode == 2){  //set ball to random paddle location if in co-op mode
+        paddle2.leftpressed = false;
+        paddle2.rightpressed = false;
         int pad = (int)random(2);
         if (pad == 0){
           balls.get(0).setLocation(paddle.xpos + paddle.w/2, paddle.ypos - balls.get(0).h/2);
@@ -439,7 +522,6 @@ class Game {
           balls.get(0).setLocation(paddle2.xpos + paddle.w/2, paddle2.ypos - balls.get(0).h/2);
         }
       }
-      println("Life Lost");
     }
     else {
      
@@ -465,13 +547,7 @@ class Game {
     }
     
     initGameComponents(board.level);
-    
-    
-    
-    
-    
+     
   }
-  
-  
   
 }
