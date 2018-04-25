@@ -28,7 +28,10 @@ class Pointer extends Entity
     angle = -PI/2;
   }
 
-
+  void rotateDown(){
+    angle *= -1;
+    direction = 0;
+  }
   void update()
   {
 
@@ -50,7 +53,7 @@ class Pointer extends Entity
       }
     }
     if (direction == 0) {
-      if (angle > (-PI/4) || angle < (-3 * PI/4))
+      if (angle < (PI/4) || angle > (3 * PI/4))
       {
         angularvel = -angularvel;
       }
