@@ -28,11 +28,14 @@ void keyPressed()
       game.nameentry.removeChar();
   }
   
-  if(key == ' ' && game.paddle.getState()==3 && game.gamestate==1)
+  if(key == CODED && keyCode == UP && game.paddle.getState()==3 && game.gamestate==1)
   {
     game.paddle.blaster.spawnBullet();
   }
-  
+  if(key == 'w' && game.paddle2.getState()==3 && game.gamestate==1)
+  {
+    game.paddle2.blaster.spawnBullet();
+  }
 
   
   

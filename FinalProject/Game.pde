@@ -9,6 +9,7 @@ class Game {
   NameEntry nameentry;
   GameBoard board;
   HUD gameinfo;
+  Menu gameovermenu;
   
   //SoundFile bgmusic;
   
@@ -93,7 +94,8 @@ class Game {
     case 9:
       nameentry.update();
       break;
-    case 10: 
+    case 10:
+      gameovermenu.update();
       break;
       
     }
@@ -184,6 +186,12 @@ class Game {
     twoplayermenu.addButton("CO-OP");
     twoplayermenu.addButton("Battle");
     twoplayermenu.addButton("BACK");
+    
+    gameovermenu = new Menu("GAME OVER");
+    gameovermenu.addButton("RESTART");
+    gameovermenu.addButton("QUIT");
+    gameovermenu.setBGColor(color(255,255,255,0));
+    
   }
 
 
@@ -196,7 +204,7 @@ class Game {
     
     paddle.update();
     if (gamemode==2){
-      paddle.inBounds = paddle2.inBoundaries(board);
+      paddle2.inBounds = paddle2.inBoundaries(board);
       paddle2.update();
     }
     
@@ -390,8 +398,9 @@ class Game {
     }
     else {
       //TODO: Handle Game over and win state
-      numLives ++;  //remove later when game state actually changes 
-     println("Game Over"); 
+      //numLives ++;  //remove later when game state actually changes 
+     gamestate = 10;
+     highscores.insertScore(playername, score);
     }
   }
   void isBoardEmpty(){
