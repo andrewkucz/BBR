@@ -26,7 +26,7 @@ class GameBoard extends Screen {
     initBoard(1);
   }
 
-  GameBoard(int l) {
+  GameBoard(int l) {//initialize for a given level
     board = new Brick[rows][cols];
     level = l;
     col = color(255);
@@ -34,7 +34,7 @@ class GameBoard extends Screen {
   }
 
   // init board of level L
-  void initBoard(int l) {
+  void initBoard(int l) {//initialize brick an powerup placement
 
     // brick size attributes  - calculated from board width and height using the number rows/cols and gap spacing
     int brickw = (w-((cols+1)*gap)) / cols;
@@ -157,7 +157,7 @@ class GameBoard extends Screen {
     }
   }
 
-  void update() {
+  void update() {//update all bricks and powerups
     
     background(0);
     noStroke();

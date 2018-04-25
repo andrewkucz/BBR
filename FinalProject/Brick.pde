@@ -15,7 +15,7 @@ class Brick extends Entity {
     state=0;
   }
 
-  Brick(int x, int y, int s, int l, Powerup p)
+  Brick(int x, int y, int s, int l, Powerup p)//creates brick and assigns color
   {
     super();
     xpos = x;
@@ -41,7 +41,7 @@ class Brick extends Entity {
 
   }
 
-  void update()
+  void update()  //draws brick
   {
 
     if (state>0)
@@ -54,7 +54,7 @@ class Brick extends Entity {
   }
 
 
-  int hit()
+  int hit()  //handles occurence of hit on the brick
   {
     if (game.score>99999)
     {
@@ -65,7 +65,7 @@ class Brick extends Entity {
     }
 
     if (state>0) {
-      game.collision.play();
+      //game.collision.play();
       if (state==1)
       {
         power.setYVel(3);

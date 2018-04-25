@@ -10,7 +10,7 @@ class Game {
   GameBoard board;
   HUD gameinfo;
   Menu gameovermenu;
-  
+
   SoundFile bgmusic, menuclick, collision, shoot, die, win, lose;  
 
   boolean initialized = false;
@@ -25,7 +25,7 @@ class Game {
 
   ArrayList<Ball> balls = new ArrayList<Ball>();
   int score;
-  
+
   //for h2h
   int player1score;
   int player2score;
@@ -36,7 +36,7 @@ class Game {
 
   Paddle paddle2;
   Paddle[] paddles;
-  
+
 
 
   int gamestate;
@@ -45,8 +45,8 @@ class Game {
   boolean clicked = false;
 
 
-  Game(PApplet p) {
-    
+  Game(PApplet p) {//initialize
+
     bgmusic = new SoundFile(p, "bgmusic.mp3");
     bgmusic.loop();
     bgmusic.amp(0.3);
@@ -61,16 +61,16 @@ class Game {
     die = new SoundFile(p, "die.wav");
     win = new SoundFile(p, "win.wav");
     lose = new SoundFile(p, "lose.wav");
-    
+
     Entity e = new Entity(this);
-    
+
     // Initialize menus
     initMenus();
   }
 
 
   // Game cycle
-  void update()
+  void update()//updates and draws proper screen
   {
     if (!initialized)
     {
@@ -109,26 +109,24 @@ class Game {
       break;
     case 10:
       gameovermenu.update();
-      if(gamemode != 3)
-      gameinfo.update(score, numLives, paddle.getState(), paddle2.getState());
+      if (gamemode != 3)
+        gameinfo.update(score, numLives, paddle.getState(), paddle2.getState());
       break;
-      
     }
 
 
     updateGameState();
-
   }
 
   // Initializes all game components (regardless of gamemode)
   // Gamemode specific rendering occurs in gameLoop();
   void initGameComponents(int l)
   {
-    if(l == 1)
+    if (l == 1)
     {
       numLives = 3;
     }
-    
+
     // Initialize game board containing the brick array
     if (gamemode == 3)
       l = -1;  //special 1v1 level
@@ -170,13 +168,13 @@ class Game {
 
     // Init leaderboard
     highscores = new Leaderboard(board.xpos + board.w, board.ypos+30);
-    
+
     // Init game info display
-    if (gamemode ==1 || gamemode == 2){
-    gameinfo = new HUD(0,0, playername, numLives);
+    if (gamemode ==1 || gamemode == 2) {
+      gameinfo = new HUD(0, 0, playername, numLives);
     }
-    if(gamemode == 3){
-    gameinfo = new HUD(playername,playername2);
+    if (gamemode == 3) {
+      gameinfo = new HUD(playername, playername2);
     }
   }
 
@@ -184,25 +182,25 @@ class Game {
 
 
   // Game collision  detection
-  void checkCollisions()
+  void checkCollisions()//checks powerup and bullet collisions
   { 
-    
-    for(Powerup p : board.powerups)
+
+    for (Powerup p : board.powerups)
     {
       p.checkCollisions(board, paddle);
-      if(gamemode == 2){
-        p.checkCollisions(board,paddle2);
+      if (gamemode == 2) {
+        p.checkCollisions(board, paddle2);
       }
     }
-    
+
     paddle.blaster.checkCollisions(board);
-    if (gamemode == 2){
+    if (gamemode == 2) {
       paddle2.blaster.checkCollisions(board);
     }
   }
 
 
-  void initMenus()
+  void initMenus()//create menus
   {
     titlescreen = new Title();
     titlescreen.addButton("Start");
@@ -211,7 +209,7 @@ class Game {
     pausemenu = new PauseMenu();
     pausemenu.addButton("Resume");
     pausemenu.addButton("Quit");
-    
+
 
     nameentry = new NameEntry("ENTER INITIALS");
 
@@ -224,77 +222,74 @@ class Game {
     twoplayermenu.addButton("CO-OP");
     twoplayermenu.addButton("Battle");
     twoplayermenu.addButton("BACK");
-    twoplayermenu.buttons.get(1).setColor(color(200));
-    twoplayermenu.buttons.get(1).textColor = color(210);
-    
+    //twoplayermenu.buttons.get(1).setColor(color(200));
+    //twoplayermenu.buttons.get(1).textColor = color(210);
+
     gameovermenu = new Menu();
     gameovermenu.setTitle("GAME OVER");
     gameovermenu.addButton("RESTART");
     gameovermenu.addButton("QUIT");
-    gameovermenu.setBGColor(color(255,255,255,0));
-    
+    gameovermenu.setBGColor(color(255, 255, 255, 0));
+
     aboutmenu = new Menu();
     aboutmenu.addButton("BACK");
   }
 
 
   // Depends on gamemode
-  void gameLoop()
+  void gameLoop()//updates components of game
   {
     board.update();
-    
+
     paddle.inBounds = paddle.inBoundaries(board);
-    
+
     paddle.update();
-    if (gamemode==2 || gamemode == 3){
+    if (gamemode==2 || gamemode == 3) {
       paddle2.inBounds = paddle2.inBoundaries(board);
       paddle2.update();
     }
-    if (gamemode == 1 || gamemode == 2){
+    if (gamemode == 1 || gamemode == 2) {
       gameinfo.update(score, numLives, paddle.getState(), paddle2.getState());
     }
-    if(gamemode == 3){
-       gameinfo.update(player1score,player2score, rounds); 
+    if (gamemode == 3) {
+      gameinfo.update(player1score, player2score, rounds);
     }
     highscores.update();
-    
-    if (!balls.isEmpty()){
+
+    if (!balls.isEmpty()) {
       int returnVal = 0;
-    for (Ball b : balls) {
-      if (b.getState() == 1)
-      {
-        //b.setLocation(paddle.xpos+paddle.w/2, paddle.ypos-balls.get(0).h/2);
-      }
-      if (b.getState() != 3) //draw for all states except 3
-      b.update();
+      for (Ball b : balls) {
+        if (b.getState() == 1)
+        {
+          //b.setLocation(paddle.xpos+paddle.w/2, paddle.ypos-balls.get(0).h/2);
+        }
+        if (b.getState() != 3) //draw for all states except 3
+          b.update();
 
-      //ball collison checking with bounds and bricks
-      if(b.state == 2 || b.state == 5){
-        returnVal = b.checkCollisions(board, paddles);
-        if (returnVal == -1) break;
+        //ball collison checking with bounds and bricks
+        if (b.state == 2 || b.state == 5) {
+          returnVal = b.checkCollisions(board, paddles);
+          if (returnVal == -1) break;
+        }
       }
-    }
 
-    for (int i = 0; i < balls.size(); i ++){
-      if (balls.get(i).getState() == 3){
-        balls.remove(i);
-        i--;
+      for (int i = 0; i < balls.size(); i ++) {
+        if (balls.get(i).getState() == 3) {
+          balls.remove(i);
+          i--;
+        }
       }
-    }
-    if (returnVal == -1){
-      nextLevel();
-    }
-    }
-    else{
-      if(gamemode == 1 || gamemode == 2){
-         loseLife(); 
+      if (returnVal == -1) {
+        nextLevel();
       }
-      else if(gamemode == 3){
-         nextRound(); 
+    } else {
+      if (gamemode == 1 || gamemode == 2) {
+        loseLife();
+      } else if (gamemode == 3) {
+        nextRound();
       }
     }
     checkCollisions();
-    
   }
 
 
@@ -304,7 +299,7 @@ class Game {
     return gamestate;
   }
 
-  void updateGameState()
+  void updateGameState()//basically traverses game states
   {
 
     // Main menu start is clicked
@@ -359,7 +354,7 @@ class Game {
     {
       game.menuclick.play();
       gamestate = 6;
-      if(gamemode==2)
+      if (gamemode==2)
       {
         gamestate = 7;
       }
@@ -403,7 +398,6 @@ class Game {
       nameentry.setDirections("ENTER P1 TAG");
       nameentry.cleararr();
       gamestate = 8;
-      
     }
     // 2 player menu "back" is clicked
     else if (gamestate == 7 && twoplayermenu.buttons.get(2).isHovered() && clicked)
@@ -417,7 +411,6 @@ class Game {
       game.menuclick.play();
       gamestate = 9;
       playername = new String(nameentry.name);
-      println(playername);
       nameentry.setDirections("ENTER P2 TAG");
       nameentry.cleararr();
     }
@@ -447,20 +440,18 @@ class Game {
       gamestate = 7;
     }
     // Game end menu restart is clicked
-    else if(gamestate == 10 && gameovermenu.buttons.get(0).isHovered() && clicked)
+    else if (gamestate == 10 && gameovermenu.buttons.get(0).isHovered() && clicked)
     {
       game.score = 0;
       game.menuclick.play();
       gamestate = 1;
       initGameComponents(1);
-    }
-    else if(gamestate == 10 && gameovermenu.buttons.get(1).isHovered() && clicked)
+    } else if (gamestate == 10 && gameovermenu.buttons.get(1).isHovered() && clicked)
     {
       game.score = 0;
       game.menuclick.play();
       gamestate = 0;
-    }
-    else if(gamestate == 4 && aboutmenu.buttons.get(0).isHovered() && clicked)
+    } else if (gamestate == 4 && aboutmenu.buttons.get(0).isHovered() && clicked)
     {
       gamestate = 0;
     }
@@ -468,86 +459,81 @@ class Game {
 
     clicked = false;
   }
-  void nextRound(){
+  void nextRound() {//h2h keeps track and resets gameplay in between rounds
     rounds --;
-    
-    if (rounds > 0){
+
+    if (rounds > 0) {
       paddle.leftpressed = false;
       paddle.rightpressed = false;
       paddle2.leftpressed = false;
       paddle2.rightpressed = false;
       balls.add(new Ball(1));
       balls.add(new Ball(1));
-      
+
       balls.get(1).setLocation(paddle2.xpos+paddle.w/2, paddle2.ypos + paddle.h + balls.get(1).h/2);//set this to the bottom of the paddle
       balls.get(1).rotatePointerDown();
       balls.get(0).setLocation(paddle.xpos+paddle.w/2, paddle.ypos-balls.get(0).h/2);
-    }
-    else {
+    } else {
       int winner = 0;
-      if(player1score > player2score){
+      if (player1score > player2score) {
         winner = 1;
         gameovermenu.setTitle("Player " + winner + " wins!");
-      }
-      else if(player2score > player1score){
+      } else if (player2score > player1score) {
         winner = 2;
         gameovermenu.setTitle("Player " + winner + " wins!");
-      }
-      else {
+      } else {
         gameovermenu.setTitle("Draw!");
       }
-      
-     gamestate = 10;
+
+      gamestate = 10;
+      player1score = 0;
+      player2score = 0;
     }
   }
-  void loseLife(){
+  void loseLife() {//when solo or co-op loses every ball
     numLives --;
-    if (numLives > 0){
-      
+    if (numLives > 0) {
+
       balls.add(new Ball(1));
       paddle.leftpressed = false;
-        paddle.rightpressed = false;//stop paddle movement
-      if (gamemode == 1){
+      paddle.rightpressed = false;//stop paddle movement
+      if (gamemode == 1) {
         balls.get(0).setLocation(paddle.xpos+paddle.w/2, paddle.ypos-balls.get(0).h/2);
-        
-      }
-      else if(gamemode == 2){  //set ball to random paddle location if in co-op mode
+      } else if (gamemode == 2) {  //set ball to random paddle location if in co-op mode
         paddle2.leftpressed = false;
         paddle2.rightpressed = false;
         int pad = (int)random(2);
-        if (pad == 0){
+        if (pad == 0) {
           balls.get(0).setLocation(paddle.xpos + paddle.w/2, paddle.ypos - balls.get(0).h/2);
-        }
-        else{
+        } else {
           balls.get(0).setLocation(paddle2.xpos + paddle.w/2, paddle2.ypos - balls.get(0).h/2);
         }
       }
-    }
-    else {
-     
-     lose.play();
-     gameovermenu.setTitle("GAME OVER");
-     gamestate = 10;
-     highscores.insertScore(playername, score);
-     
-    }
-  }
-  
-  void nextLevel()
-  {
-    win.play();
-    board.level++;
-    
-    if(board.level == 4)
-    {
-      board.level = 1;
-      gameovermenu.setTitle("YOU WIN");
+    } else {
+
+      lose.play();
+      gameovermenu.setTitle("GAME OVER");
       gamestate = 10;
       highscores.insertScore(playername, score);
+      score = 0;
     }
-    
-    initGameComponents(board.level);
-     
   }
-  
+
+  void nextLevel()//go to next level if new one is done or display win state
+  {
+    if (gamestate != 3) {
+      win.play();
+      board.level++;
+
+      if (board.level == 4)
+      {
+        board.level = 1;
+        gameovermenu.setTitle("YOU WIN");
+        gamestate = 10;
+        highscores.insertScore(playername, score);
+      }
+
+      initGameComponents(board.level);
+    }
+  }
 }

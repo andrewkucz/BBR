@@ -10,13 +10,13 @@ void setup()
   game = new Game(this);
 }
 
-void draw()
+void draw()  //main draw function
 {
   game.update();
 }
 
 
-void keyPressed()
+void keyPressed()//next functions handle user input
 {
 
   if (game.nameentry.isValid(key) && (game.getGameState() == 5 || game.getGameState() == 8 || game.getGameState() == 9))
