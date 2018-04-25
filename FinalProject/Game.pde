@@ -221,7 +221,7 @@ class Game {
       b.update();
 
       //ball collison checking with bounds and bricks
-      if(b.state == 2){
+      if(b.state == 2 || b.state == 5){
         b.checkCollisions(board, paddles);
       }
     }
