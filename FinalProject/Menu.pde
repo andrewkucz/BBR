@@ -2,12 +2,18 @@ class Menu extends Screen {
 
 
   ArrayList<MenuButton> buttons = new ArrayList<MenuButton>();
-  String title;
+  String title = "";
 
 
   Menu()
   {
     col = color(255);
+  }
+  
+  Menu(String s)
+  {
+    col = color(255);
+    title = s;
   }
 
 
@@ -27,12 +33,28 @@ class Menu extends Screen {
     strokeWeight(1);
     noStroke();
     fill(col);
-    rect(xpos, ypos, w, h); 
+    rect(xpos, ypos, w, h);
+    
+    fill(0);
+    noStroke();
+    textAlign(CENTER);
+    text(title, xpos+(w/2), ypos+250);
+    
 
     for (MenuButton mb : buttons) {
       mb.update();
     }
   }
+  
+  
+  void setBGColor(color c)
+  {
+    col = c; 
+  }
+  
+  
+  
+  
 } // end class
 
 
