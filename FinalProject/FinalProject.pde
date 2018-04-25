@@ -1,3 +1,4 @@
+import processing.sound.*;
 Game game;
 
 void setup()
@@ -6,7 +7,7 @@ void setup()
   background(0);
 
   frameRate(60);
-  game = new Game();
+  game = new Game(this);
 }
 
 void draw()

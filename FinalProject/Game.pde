@@ -5,14 +5,13 @@ class Game {
   PauseMenu pausemenu;
   Menu optionsmenu;
   Menu gamemodemenu, twoplayermenu;
-  Screen about;
+  Menu aboutmenu;
   NameEntry nameentry;
   GameBoard board;
   HUD gameinfo;
   Menu gameovermenu;
   
-  //SoundFile bgmusic;
-  
+  SoundFile bgmusic, menuclick, collision, shoot, die, win, lose;  
 
   boolean initialized = false;
   int gamemode;
@@ -46,12 +45,22 @@ class Game {
   boolean clicked = false;
 
 
-  Game() {
+  Game(PApplet p) {
+    
+    bgmusic = new SoundFile(p, "bgmusic.mp3");
+    bgmusic.loop();
+    bgmusic.amp(0.3);
     gamestate = 0;
     score = 0;
     numLives = 3;
     rounds = 5;
     gamemode = 1;
+    shoot = new SoundFile(p, "shoot.wav");
+    collision = new SoundFile(p, "collision.wav");
+    menuclick = new SoundFile(p, "menuclick.wav");
+    die = new SoundFile(p, "die.wav");
+    win = new SoundFile(p, "win.wav");
+    lose = new SoundFile(p, "lose.wav");
     
     Entity e = new Entity(this);
     
@@ -80,11 +89,8 @@ class Game {
     case 2: 
       pausemenu.update();
       break;
-    case 3: 
-      //optionsmenu.update();
-      break;
     case 4: 
-      //aboutmenu.update();
+      aboutmenu.update();
       break;
     case 5: 
       nameentry.update();
@@ -118,6 +124,11 @@ class Game {
   // Gamemode specific rendering occurs in gameLoop();
   void initGameComponents(int l)
   {
+    if(l == 1)
+    {
+      numLives = 3;
+    }
+    
     // Initialize game board containing the brick array
     if (gamemode == 3)
       l = -1;  //special 1v1 level
@@ -195,7 +206,6 @@ class Game {
   {
     titlescreen = new Title();
     titlescreen.addButton("Start");
-    titlescreen.addButton("Options");
     titlescreen.addButton("About");
 
     pausemenu = new PauseMenu();
@@ -214,6 +224,8 @@ class Game {
     twoplayermenu.addButton("CO-OP");
     twoplayermenu.addButton("Battle");
     twoplayermenu.addButton("BACK");
+    twoplayermenu.buttons.get(1).setColor(color(200));
+    twoplayermenu.buttons.get(1).textColor = color(210);
     
     gameovermenu = new Menu();
     gameovermenu.setTitle("GAME OVER");
@@ -221,6 +233,8 @@ class Game {
     gameovermenu.addButton("QUIT");
     gameovermenu.setBGColor(color(255,255,255,0));
     
+    aboutmenu = new Menu();
+    aboutmenu.addButton("BACK");
   }
 
 
@@ -296,30 +310,29 @@ class Game {
     // Main menu start is clicked
     if (gamestate == 0 && titlescreen.buttons.get(0).isHovered() && clicked)
     {
+      game.menuclick.play();
       gamestate = 6;
     }
 
-    // Main menu options is clicked
-    else if (gamestate == 0 && titlescreen.buttons.get(1).isHovered() && clicked)
-    {
-      //gamestate = 3;
-    }
 
     // Main menu about is clicked
     else if (gamestate == 0 && titlescreen.buttons.get(1).isHovered() && clicked)
     {
+      game.menuclick.play();
       gamestate = 4;
     }
 
     // Game is running and p is pressed -> pause state
     else if (gamestate == 1 && keyPressed && key == 'p')
     {
+      game.menuclick.play();
       gamestate = 2;
     }
 
     // Pause menu resume is clicked
     else if (gamestate == 2 && pausemenu.buttons.get(0).isHovered() && clicked)
     {
+      game.menuclick.play();
       gamestate = 1;
       pausemenu.active = false;
       background(0);
@@ -327,6 +340,7 @@ class Game {
     // Pause menu quit is clicked
     else if (gamestate == 2 && pausemenu.buttons.get(1).isHovered() && clicked)
     {
+      game.menuclick.play();
       gamestate = 0;
       initGameComponents(1);
       pausemenu.active = false;
@@ -335,6 +349,7 @@ class Game {
     // Name entry menu "OK" is clicked
     else if (gamestate == 5 && nameentry.ok.isHovered() && clicked && nameentry.name[2] != ' ')
     {
+      game.menuclick.play();
       playername = new String(nameentry.name);
       gamestate = 1;
       initGameComponents(1);
@@ -342,6 +357,7 @@ class Game {
     // Single player name entry menu "BACK" is clicked 
     else if (gamestate == 5 && nameentry.back.isHovered() && clicked)
     {
+      game.menuclick.play();
       gamestate = 6;
       if(gamemode==2)
       {
@@ -351,6 +367,7 @@ class Game {
     // Gamemode menu "1 Player" is clicked
     else if (gamestate == 6 && gamemodemenu.buttons.get(0).isHovered() && clicked)
     {
+      game.menuclick.play();
       nameentry.setDirections("ENTER INITIALS");
       nameentry.cleararr();
       gamestate = 5;
@@ -359,16 +376,19 @@ class Game {
     // Gamemode menu "2 Player" is clicked
     else if (gamestate == 6 && gamemodemenu.buttons.get(1).isHovered() && clicked)
     {
+      game.menuclick.play();
       gamestate = 7;
     }
     // Gamemode menu "Back" is clicked
     else if (gamestate == 6 && gamemodemenu.buttons.get(2).isHovered() && clicked)
     {
+      game.menuclick.play();
       gamestate = 0;
     }
     // 2 player menu "co-op" is clicked
     else if (gamestate == 7 && twoplayermenu.buttons.get(0).isHovered() && clicked)
     {
+      game.menuclick.play();
       gamestate = 5;
       nameentry.setDirections("ENTER TEAM TAG");
       nameentry.cleararr();
@@ -377,6 +397,8 @@ class Game {
     // 2 player menu "battle" is clicked
     else if (gamestate == 7 && twoplayermenu.buttons.get(1).isHovered() && clicked)
     {
+
+      game.menuclick.play();
       gamemode = 3;
       nameentry.setDirections("ENTER P1 TAG");
       nameentry.cleararr();
@@ -386,11 +408,13 @@ class Game {
     // 2 player menu "back" is clicked
     else if (gamestate == 7 && twoplayermenu.buttons.get(2).isHovered() && clicked)
     {
+      game.menuclick.play();
       gamestate = 6;
     }
     // 2 player 1st player name entry screen "OK" is clicked
     else if (gamestate == 8 && nameentry.ok.isHovered() && clicked && nameentry.name[2] != ' ')
     {
+      game.menuclick.play();
       gamestate = 9;
       playername = new String(nameentry.name);
       println(playername);
@@ -400,6 +424,7 @@ class Game {
     // 2 player 2nd player name entry screen "OK" is clicked
     else if (gamestate == 9 && nameentry.ok.isHovered() && clicked && nameentry.name[2] != ' ')
     {
+      game.menuclick.play();
       gamestate = 1;
       playername2 = new String(nameentry.name);
       initGameComponents(1);
@@ -407,6 +432,7 @@ class Game {
     // 2 player 2nd player name entry screen "BACK" is clicked
     else if (gamestate == 9 && nameentry.back.isHovered() && clicked)
     {
+      game.menuclick.play();
       gamestate = 8;
       nameentry.setDirections("ENTER P1 TAG");
       nameentry.name[0] = playername.charAt(0);
@@ -417,7 +443,26 @@ class Game {
     // 2 player 1st player name entry screen "BACK" is clicked
     else if (gamestate == 8 && nameentry.back.isHovered() && clicked)
     {
+      game.menuclick.play();
       gamestate = 7;
+    }
+    // Game end menu restart is clicked
+    else if(gamestate == 10 && gameovermenu.buttons.get(0).isHovered() && clicked)
+    {
+      game.score = 0;
+      game.menuclick.play();
+      gamestate = 1;
+      initGameComponents(1);
+    }
+    else if(gamestate == 10 && gameovermenu.buttons.get(1).isHovered() && clicked)
+    {
+      game.score = 0;
+      game.menuclick.play();
+      gamestate = 0;
+    }
+    else if(gamestate == 4 && aboutmenu.buttons.get(0).isHovered() && clicked)
+    {
+      gamestate = 0;
     }
 
 
@@ -479,7 +524,8 @@ class Game {
       }
     }
     else {
-      
+     
+     lose.play();
      gameovermenu.setTitle("GAME OVER");
      gamestate = 10;
      highscores.insertScore(playername, score);
@@ -489,6 +535,7 @@ class Game {
   
   void nextLevel()
   {
+    win.play();
     board.level++;
     
     if(board.level == 4)
