@@ -58,7 +58,7 @@ class Game {
   {
     if (!initialized)
     {
-      initGameComponents();
+      initGameComponents(1);
       initialized = true;
     }
 
@@ -96,6 +96,7 @@ class Game {
       break;
     case 10:
       gameovermenu.update();
+      gameinfo.update(score, numLives, paddle.getState(), paddle2.getState());
       break;
       
     }
@@ -107,11 +108,10 @@ class Game {
 
   // Initializes all game components (regardless of gamemode)
   // Gamemode specific rendering occurs in gameLoop();
-  void initGameComponents()
+  void initGameComponents(int l)
   {
-
     // Initialize game board containing the brick array
-    board = new GameBoard(1);
+    board = new GameBoard(l);
 
     // Initialize user controlled paddle object
     paddle = new Paddle(118, 15, 0, color(255, 0, 0));
@@ -187,7 +187,8 @@ class Game {
     twoplayermenu.addButton("Battle");
     twoplayermenu.addButton("BACK");
     
-    gameovermenu = new Menu("GAME OVER");
+    gameovermenu = new Menu();
+    gameovermenu.setTitle("GAME OVER");
     gameovermenu.addButton("RESTART");
     gameovermenu.addButton("QUIT");
     gameovermenu.setBGColor(color(255,255,255,0));
@@ -285,7 +286,7 @@ class Game {
     else if (gamestate == 2 && pausemenu.buttons.get(1).isHovered() && clicked)
     {
       gamestate = 0;
-      initGameComponents();
+      initGameComponents(1);
       pausemenu.active = false;
       background(0);
     }
@@ -294,7 +295,7 @@ class Game {
     {
       playername = new String(nameentry.name);
       gamestate = 1;
-      initGameComponents();
+      initGameComponents(1);
     }
     // Single player name entry menu "BACK" is clicked 
     else if (gamestate == 5 && nameentry.back.isHovered() && clicked)
@@ -397,14 +398,34 @@ class Game {
       println("Life Lost");
     }
     else {
-      //TODO: Handle Game over and win state
-      //numLives ++;  //remove later when game state actually changes 
+      
+     gameovermenu.setTitle("GAME OVER");
      gamestate = 10;
      highscores.insertScore(playername, score);
+     
     }
   }
-  void isBoardEmpty(){
-    //TODO: Handle Win Level Event
-    println("Win Level");
+  
+  void nextLevel()
+  {
+    board.level++;
+    
+    if(board.level == 4)
+    {
+      board.level = 1;
+      gameovermenu.setTitle("YOU WIN");
+      gamestate = 10;
+      highscores.insertScore(playername, score);
+    }
+    
+    initGameComponents(board.level);
+    
+    
+    
+    
+    
   }
+  
+  
+  
 }

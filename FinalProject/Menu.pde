@@ -9,12 +9,6 @@ class Menu extends Screen {
   {
     col = color(255);
   }
-  
-  Menu(String s)
-  {
-    col = color(255);
-    title = s;
-  }
 
 
   void addButton(String s)
@@ -52,6 +46,10 @@ class Menu extends Screen {
     col = c; 
   }
   
+  void setTitle(String s)
+  {
+    title = s;
+  }
   
   
   
